@@ -8,10 +8,11 @@ export const entered = { value: false };
 export const Route = createFileRoute("/directory")({
   beforeLoad: () => {
     // On a hard reload or direct visit, send users back to the landing page.
-    if (typeof window !== "undefined" && !entered.value) {
+    if (!entered.value) {
       throw redirect({ to: "/" });
     }
   },
+
   component: Directory,
   head: () => ({
     meta: [
