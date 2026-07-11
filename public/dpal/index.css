@@ -206,29 +206,44 @@ nav.sticky {
     border-bottom: 1px solid rgba(255,255,255,0.08) !important;
 }
 
-/* Top-bar action buttons → glassy pills */
+/* Top-bar action buttons → minimal ghost style */
 #downloadAndroidBtn,
-#downloadWindowsBtn,
-#sortSelect,
-#searchInput {
-    background: rgba(255,255,255,0.06) !important;
-    border: 1px solid rgba(255,255,255,0.14) !important;
-    color: rgba(255,255,255,0.95) !important;
-    border-radius: 10px !important;
-    backdrop-filter: blur(10px) saturate(140%);
+#downloadWindowsBtn {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    color: rgba(255,255,255,0.85) !important;
+    border-radius: 999px !important;
+    padding: 6px 14px !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(6px);
     transition: all .25s ease;
 }
 #downloadAndroidBtn:hover,
-#downloadWindowsBtn:hover,
-#sortSelect:hover {
-    background: rgba(255,255,255,0.12) !important;
-    border-color: rgba(147,197,253,0.45) !important;
-    box-shadow: 0 0 18px rgba(99,102,241,0.28);
+#downloadWindowsBtn:hover {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(147,197,253,0.35) !important;
+    color: #fff !important;
+    box-shadow: 0 0 14px rgba(99,102,241,0.20);
 }
-#searchInput::placeholder { color: rgba(255,255,255,0.55) !important; }
+#downloadAndroidBtn .material-symbols-outlined,
+#downloadWindowsBtn .material-symbols-outlined { opacity: 0.75; }
+
+#sortSelect,
+#searchInput {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    color: rgba(255,255,255,0.9) !important;
+    border-radius: 999px !important;
+    padding: 6px 14px !important;
+    transition: all .25s ease;
+}
+#sortSelect:hover,
+#searchInput:hover { border-color: rgba(255,255,255,0.2) !important; }
+#searchInput::placeholder { color: rgba(255,255,255,0.45) !important; }
 #searchInput:focus {
-    border-color: rgba(147,197,253,0.55) !important;
-    box-shadow: 0 0 18px rgba(99,102,241,0.32);
+    border-color: rgba(147,197,253,0.5) !important;
+    box-shadow: 0 0 14px rgba(99,102,241,0.25);
 }
 #sortSelect option { background: #0a0c14; color: #fff; }
 
