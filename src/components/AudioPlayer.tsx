@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import songAsset from "../assets/deep-breath.mp3.asset.json";
+const songAsset = { url: "/audio/deep-breath.mp3" };
 
 let sharedAudio: HTMLAudioElement | null = null;
 
