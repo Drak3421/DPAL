@@ -33,7 +33,11 @@ function HomePage() {
   const [exiting, setExiting] = useState(false);
   const [showDirectory, setShowDirectory] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
+  const [speed, setSpeed] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const speedRef = useRef(1);
+  const triggeredRef = useRef(false);
 
   // Preload the directory iframe in the background as soon as landing mounts
   useEffect(() => {
@@ -56,6 +60,74 @@ function HomePage() {
     setTimeout(() => setShowDirectory(true), 450);
     setTimeout(() => navigate({ to: "/directory" }), 1400);
   };
+
+  // Scroll → speed up video. When speed passes threshold, enter the directory.
+  useEffect(() => {
+    const MAX_SPEED = 6;
+    const TRIGGER = 5.5;
+    const DECAY_PER_SEC = 0.6;
+
+    const bump = (deltaY: number) => {
+      if (triggeredRef.current) return;
+      const next = Math.min(MAX_SPEED, Math.max(1, speedRef.current + deltaY * 0.004));
+      speedRef.current = next;
+      setSpeed(next);
+      if (videoRef.current) videoRef.current.playbackRate = next;
+      if (next >= TRIGGER) {
+        triggeredRef.current = true;
+        handleEnter();
+      }
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (exiting) return;
+      e.preventDefault();
+      bump(e.deltaY);
+    };
+
+    let lastTouch = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      lastTouch = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (exiting) return;
+      const y = e.touches[0].clientY;
+      const dy = lastTouch - y;
+      lastTouch = y;
+      bump(dy * 2);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+
+    // Gentle decay so the effect eases back when the user stops scrolling.
+    let last = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const dt = (t - last) / 1000;
+      last = t;
+      if (!triggeredRef.current && speedRef.current > 1) {
+        const next = Math.max(1, speedRef.current - DECAY_PER_SEC * dt);
+        speedRef.current = next;
+        setSpeed(next);
+        if (videoRef.current) videoRef.current.playbackRate = next;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [exiting]);
+
+  const speedProgress = Math.min(1, (speed - 1) / (5.5 - 1));
+
+
 
   return (
     <main
@@ -99,17 +171,22 @@ function HomePage() {
           }}
         >
           <video
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+            ref={videoRef}
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_031045_0e1165dd-ab48-46e3-ad3d-5fe77f217647.mp4"
             autoPlay
             loop
             muted
             playsInline
             className="absolute inset-0 h-full w-full object-cover"
             style={{
-              transform: exiting ? "scale(1.15)" : "scale(1)",
-              transition: "transform 1400ms cubic-bezier(0.4,0,0.2,1)",
+              transform: exiting ? "scale(1.15)" : `scale(${1 + speedProgress * 0.08})`,
+              filter: `blur(${speedProgress * 3}px)`,
+              transition: exiting
+                ? "transform 1400ms cubic-bezier(0.4,0,0.2,1)"
+                : "transform 200ms ease-out, filter 200ms ease-out",
             }}
           />
+
 
           <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
             <a href="#" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -166,6 +243,19 @@ function HomePage() {
             >
               Enter the Directory
             </button>
+
+            <div className="mt-16 flex flex-col items-center gap-3 text-white/60">
+              <span className="text-xs uppercase tracking-[0.3em]">Scroll to accelerate</span>
+              <div className="h-[2px] w-40 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full bg-white/80"
+                  style={{
+                    width: `${speedProgress * 100}%`,
+                    transition: "width 120ms ease-out",
+                  }}
+                />
+              </div>
+            </div>
           </section>
         </div>
       )}
