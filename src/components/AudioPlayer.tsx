@@ -46,20 +46,28 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
       });
     }
 
-    // Pause when tab is hidden, or when another <audio>/<video> on the page starts playing.
+    // Pause when tab is hidden, when another <audio>/<video> on the page starts playing,
+    // or when the embedded DPAL browser reports that a nested website/video took focus.
     const onVisibility = () => { if (document.hidden && !a.paused) a.pause(); };
     const onOtherPlay = (e: Event) => {
       const target = e.target as HTMLMediaElement | null;
       if (target && target !== a && target instanceof HTMLMediaElement && !a.paused) a.pause();
     };
+    const onEmbeddedBrowserAudio = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      const data = event.data as { type?: string } | null;
+      if (data?.type === "DPAL_PAUSE_BACKGROUND_AUDIO" && !a.paused) a.pause();
+    };
     document.addEventListener("visibilitychange", onVisibility);
     document.addEventListener("play", onOtherPlay, true);
+    window.addEventListener("message", onEmbeddedBrowserAudio);
 
     return () => {
       a.removeEventListener("play", onPlay);
       a.removeEventListener("pause", onPause);
       document.removeEventListener("visibilitychange", onVisibility);
       document.removeEventListener("play", onOtherPlay, true);
+      window.removeEventListener("message", onEmbeddedBrowserAudio);
     };
   }, []);
 
