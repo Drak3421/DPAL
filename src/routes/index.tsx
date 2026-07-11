@@ -53,6 +53,8 @@ function HomePage() {
 
   const handleEnter = () => {
     if (exiting) return;
+    entered.value = true;
+
     const a = getSharedAudio();
     if (a && a.paused) a.play().catch(() => {});
     if (iframeRef.current && !iframeRef.current.src) {
