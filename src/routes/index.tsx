@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { entered } from "./directory";
 import { AudioToggle, getSharedAudio } from "../components/AudioPlayer";
@@ -32,6 +32,18 @@ const playfair = { fontFamily: "'Playfair Display', serif" };
 function HomePage() {
   const navigate = useNavigate();
   const [exiting, setExiting] = useState(false);
+  const [iframeReady, setIframeReady] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Preload the directory iframe in the background as soon as landing mounts
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (iframeRef.current && !iframeRef.current.src) {
+        iframeRef.current.src = "/dpal/index.html";
+      }
+    }, 200);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleEnter = () => {
     if (exiting) return;
@@ -39,7 +51,8 @@ function HomePage() {
     if (a && a.paused) a.play().catch(() => {});
     entered.value = true;
     setExiting(true);
-    setTimeout(() => navigate({ to: "/directory" }), 1100);
+    // Longer runway — iframe is already loaded, we're just crossfading
+    setTimeout(() => navigate({ to: "/directory" }), 1400);
   };
 
   return (
@@ -47,16 +60,53 @@ function HomePage() {
       className="relative min-h-screen w-full overflow-hidden bg-black text-white"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      <video
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className={`absolute inset-0 z-0 h-full w-full object-cover ${exiting ? "hero-video-zoom" : ""}`}
+      {/* Preloaded directory iframe sits underneath, invisible until hero fades out */}
+      <iframe
+        ref={iframeRef}
+        title="DPAL preload"
+        aria-hidden="true"
+        onLoad={() => setIframeReady(true)}
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100vw",
+          height: "100vh",
+          border: 0,
+          zIndex: 0,
+          opacity: exiting && iframeReady ? 1 : 0,
+          transform: exiting ? "scale(1)" : "scale(1.04)",
+          filter: exiting ? "blur(0)" : "blur(6px)",
+          transition:
+            "opacity 900ms cubic-bezier(0.4,0,0.2,1) 300ms, transform 1400ms cubic-bezier(0.2,0.8,0.2,1), filter 1000ms ease-out",
+          pointerEvents: "none",
+        }}
       />
 
-      <div className={exiting ? "hero-content-out" : ""}>
+      {/* Hero layer — fades and lifts away to reveal the loaded iframe */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+          opacity: exiting ? 0 : 1,
+          transform: exiting ? "translateY(-16px) scale(0.985)" : "translateY(0) scale(1)",
+          filter: exiting ? "blur(10px)" : "blur(0)",
+          transition:
+            "opacity 800ms cubic-bezier(0.4,0,0.2,1), transform 1200ms cubic-bezier(0.4,0,0.2,1), filter 800ms cubic-bezier(0.4,0,0.2,1)",
+        }}
+      >
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{
+            transform: exiting ? "scale(1.15)" : "scale(1)",
+            transition: "transform 1400ms cubic-bezier(0.4,0,0.2,1)",
+          }}
+        />
+
         <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
           <a href="#" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             DPAL
@@ -114,8 +164,6 @@ function HomePage() {
           </button>
         </section>
       </div>
-
-      {exiting && <div className="transition-veil" aria-hidden="true" />}
     </main>
   );
 }

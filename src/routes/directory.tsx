@@ -18,28 +18,25 @@ export const Route = createFileRoute("/directory")({
 function Directory() {
   const navigate = useNavigate();
   const [allowed, setAllowed] = useState(false);
-  const [veilGone, setVeilGone] = useState(false);
 
   useEffect(() => {
     if (entered.value) {
       setAllowed(true);
-      const t = setTimeout(() => setVeilGone(true), 950);
-      return () => clearTimeout(t);
+    } else {
+      navigate({ to: "/", replace: true });
     }
-    navigate({ to: "/", replace: true });
   }, [navigate]);
 
   if (!allowed) return null;
 
+  // Iframe was already loaded on the landing page — browser serves it instantly here
   return (
     <>
       <iframe
         src="/dpal/index.html"
         title="DPAL"
-        className="dir-reveal"
         style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", border: 0 }}
       />
-      {!veilGone && <div className="dir-veil" aria-hidden="true" />}
       <AudioToggle />
     </>
   );
