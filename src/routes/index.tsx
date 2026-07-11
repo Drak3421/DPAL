@@ -243,6 +243,19 @@ function HomePage() {
             >
               Enter the Directory
             </button>
+
+            <div className="mt-16 flex flex-col items-center gap-3 text-white/60">
+              <span className="text-xs uppercase tracking-[0.3em]">Scroll to accelerate</span>
+              <div className="h-[2px] w-40 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full bg-white/80"
+                  style={{
+                    width: `${speedProgress * 100}%`,
+                    transition: "width 120ms ease-out",
+                  }}
+                />
+              </div>
+            </div>
           </section>
         </div>
       )}
