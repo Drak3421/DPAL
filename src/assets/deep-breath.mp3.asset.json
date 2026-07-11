@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "asset_id": "57d43bf0-0309-49cf-b4ed-c5b5fb5d3dc4",
-  "project_id": "e7d55837-6b24-4dd9-9f23-7c57c19c5460",
-  "url": "/__l5e/assets-v1/57d43bf0-0309-49cf-b4ed-c5b5fb5d3dc4/deep-breath.mp3",
-  "r2_key": "a/v1/e7d55837-6b24-4dd9-9f23-7c57c19c5460/57d43bf0-0309-49cf-b4ed-c5b5fb5d3dc4/deep-breath.mp3",
+  "asset_id": "83a2e9dc-e0bc-4405-8ee8-c47cb6b14988",
+  "project_id": "a948a3d4-7844-4e0e-901e-9b0b34daded6",
+  "url": "/__l5e/assets-v1/83a2e9dc-e0bc-4405-8ee8-c47cb6b14988/deep-breath.mp3",
+  "r2_key": "a/v1/a948a3d4-7844-4e0e-901e-9b0b34daded6/83a2e9dc-e0bc-4405-8ee8-c47cb6b14988/deep-breath.mp3",
   "original_filename": "deep-breath.mp3",
   "size": 2671919,
   "content_type": "audio/mpeg",
-  "created_at": "2026-07-10T20:10:41Z"
+  "created_at": "2026-07-11T12:54:18Z"
 }
