@@ -126,19 +126,9 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  useEffect(() => {
-    // Clean up legacy DPAL iframe service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.getRegistrations().then((regs) => {
-        regs.forEach((r) => {
-          if (r.scope.includes("/dpal")) r.unregister();
-        });
-      });
-    }
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
