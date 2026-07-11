@@ -1,0 +1,18 @@
+{
+  "name": "DPAL - FMHY Directory",
+  "short_name": "DPAL",
+  "description": "The ultimate piracy and media discovery app, built for the web.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "app-icon-v2.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

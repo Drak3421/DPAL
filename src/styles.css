@@ -215,3 +215,96 @@ body {
 .animate-fade-rise { animation: fade-rise 0.8s ease-out both; }
 .animate-fade-rise-delay { animation: fade-rise 0.8s ease-out 0.2s both; }
 .animate-fade-rise-delay-2 { animation: fade-rise 0.8s ease-out 0.4s both; }
+
+/* ===== DPAL hero exit + black hole transition ===== */
+.font-playfair { font-family: 'Playfair Display', serif; }
+
+@keyframes heroExit {
+  0%   { opacity:1; transform: scale(1) rotate(0deg); filter: blur(0); }
+  60%  { opacity:1; transform: scale(0.25) rotate(320deg); filter: blur(3px); }
+  100% { opacity:0; transform: scale(0.001) rotate(720deg); filter: blur(14px); }
+}
+.hero-exit { animation: heroExit 1.6s cubic-bezier(0.7,0,0.84,0) forwards; transform-origin: 50% 50%; }
+
+.blackhole-stage {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.85) 100%);
+  animation: bhStageFade 2s ease-in forwards;
+  overflow: hidden;
+}
+@keyframes bhStageFade {
+  0%   { background-color: rgba(0,0,0,0); }
+  70%  { background-color: rgba(0,0,0,0.6); }
+  100% { background-color: rgba(0,0,0,1); }
+}
+.blackhole-core {
+  position: absolute; left: 50%; top: 50%;
+  width: 80px; height: 80px; border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%,
+    #000 40%, #0a0505 55%, #3a1a08 68%, #e8702a 82%, #ffb867 92%, rgba(255,180,80,0) 100%);
+  box-shadow: 0 0 60px 10px rgba(232,112,42,0.55), 0 0 160px 40px rgba(232,112,42,0.35), inset 0 0 30px 4px #000;
+  transform: translate(-50%, -50%) scale(0);
+  animation: bhCoreGrow 2s cubic-bezier(0.55,0,0.85,0.35) forwards;
+}
+@keyframes bhCoreGrow {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  70%  { transform: translate(-50%, -50%) scale(6); }
+  100% { transform: translate(-50%, -50%) scale(45); box-shadow: 0 0 0 0 rgba(0,0,0,0); background: #000; }
+}
+.blackhole-disk {
+  position: absolute; left: 50%; top: 50%;
+  width: 520px; height: 520px; border-radius: 9999px;
+  background: conic-gradient(from 0deg,
+    rgba(255,220,150,0) 0deg, rgba(255,180,80,0.9) 40deg, rgba(232,112,42,0.6) 90deg,
+    rgba(120,40,10,0.2) 160deg, rgba(255,180,80,0.8) 220deg, rgba(232,112,42,0.5) 300deg,
+    rgba(255,220,150,0) 360deg);
+  filter: blur(14px);
+  transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  animation: bhDiskSpin 0.6s linear infinite, bhDiskGrow 2s cubic-bezier(0.55,0,0.85,0.35) forwards;
+  mix-blend-mode: screen;
+}
+@keyframes bhDiskSpin { to { transform: translate(-50%, -50%) scale(var(--bh-s,1)) rotate(360deg); } }
+@keyframes bhDiskGrow {
+  0%   { --bh-s: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  70%  { --bh-s: 1.2; opacity: 0.9; }
+  100% { --bh-s: 2.2; opacity: 0; }
+}
+@property --bh-s { syntax: "<number>"; inherits: false; initial-value: 1; }
+
+@keyframes dirEnter {
+  0%   { opacity: 0; transform: scale(0.001) rotate(-720deg); filter: blur(14px); }
+  40%  { opacity: 1; transform: scale(0.25) rotate(-320deg); filter: blur(3px); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }
+}
+.dir-enter { animation: dirEnter 1.4s cubic-bezier(0.16,1,0.3,1) both; transform-origin: 50% 50%; }
+
+@keyframes bhReverseStage {
+  0%   { background-color: rgba(0,0,0,1); opacity: 1; }
+  70%  { background-color: rgba(0,0,0,0.5); opacity: 1; }
+  100% { background-color: rgba(0,0,0,0); opacity: 0; }
+}
+.blackhole-stage-reverse {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  animation: bhReverseStage 1.4s cubic-bezier(0.16,1,0.3,1) forwards;
+  overflow: hidden;
+}
+@keyframes bhCoreShrink {
+  0%   { transform: translate(-50%, -50%) scale(45); background: #000; box-shadow: 0 0 0 0 rgba(0,0,0,0); opacity: 1; }
+  30%  { transform: translate(-50%, -50%) scale(6); box-shadow: 0 0 60px 10px rgba(232,112,42,0.55), 0 0 160px 40px rgba(232,112,42,0.35), inset 0 0 30px 4px #000; }
+  90%  { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+.blackhole-stage-reverse .blackhole-core { animation: bhCoreShrink 1.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes bhDiskShrink {
+  0%   { --bh-s: 2.2; opacity: 0; }
+  20%  { --bh-s: 1.4; opacity: 0.9; }
+  80%  { --bh-s: 0.6; opacity: 0.8; }
+  100% { --bh-s: 0; opacity: 0; }
+}
+.blackhole-stage-reverse .blackhole-disk { animation: bhDiskSpin 0.6s linear infinite, bhDiskShrink 1.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+@media (prefers-reduced-motion: reduce){
+  .hero-exit,.dir-enter,.blackhole-core,.blackhole-disk,.blackhole-stage,.blackhole-stage-reverse{ animation:none; opacity:1; }
+}
