@@ -1,7 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
-import { entered } from "./directory";
 import { AudioToggle, getSharedAudio } from "../components/AudioPlayer";
 
 export const Route = createFileRoute("/")({
@@ -30,6 +29,7 @@ const serif = { fontFamily: "'Instrument Serif', serif" };
 const playfair = { fontFamily: "'Playfair Display', serif" };
 
 function HomePage() {
+  const navigate = useNavigate();
   const [exiting, setExiting] = useState(false);
   const [showDirectory, setShowDirectory] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
@@ -45,33 +45,16 @@ function HomePage() {
     return () => clearTimeout(t);
   }, []);
 
-  // Support browser back button returning to landing
-  useEffect(() => {
-    const onPop = () => {
-      if (window.location.pathname === "/") {
-        setShowDirectory(false);
-        setExiting(false);
-        entered.value = false;
-      } else if (window.location.pathname === "/directory") {
-        entered.value = true;
-        setExiting(true);
-        setShowDirectory(true);
-      }
-    };
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
-
   const handleEnter = () => {
     if (exiting) return;
     const a = getSharedAudio();
     if (a && a.paused) a.play().catch(() => {});
-    entered.value = true;
+    if (iframeRef.current && !iframeRef.current.src) {
+      iframeRef.current.src = "/dpal/index.html";
+    }
     setExiting(true);
-    // Update URL without unmounting — iframe stays alive
-    window.history.pushState({}, "", "/directory");
-    // After transition completes, mark directory as fully shown (removes hero from DOM)
-    setTimeout(() => setShowDirectory(true), 1400);
+    setTimeout(() => setShowDirectory(true), 450);
+    setTimeout(() => navigate({ to: "/directory" }), 1400);
   };
 
   return (
