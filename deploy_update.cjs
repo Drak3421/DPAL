@@ -41,20 +41,6 @@ const replacementAppJs = `const revealObserver = new IntersectionObserver((entri
 
 appJs = appJs.replace(targetAppJs, replacementAppJs);
 
-console.log('Applying animation patch...');
-appJs = appJs.replace(
-    "panel.classList.remove('translate-x-full');",
-    "panel.classList.remove('is-closing', 'translate-x-full');\n        panel.classList.add('is-opening');"
-);
-appJs = appJs.replace(
-    "panel.classList.add('translate-x-full');",
-    "panel.classList.add('is-closing');\n        panel.classList.remove('is-opening');"
-);
-appJs = appJs.replace(
-    "setTimeout(() => overlay.classList.add('hidden'), 300);",
-    "setTimeout(() => {\n            overlay.classList.add('hidden');\n            panel.classList.remove('is-closing');\n            panel.classList.add('translate-x-full');\n        }, 400);"
-);
-
 fs.writeFileSync('public/dpal/app.js', appJs, 'utf8');
 
 console.log('Applying audio patch...');
