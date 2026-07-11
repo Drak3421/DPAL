@@ -1,4 +1,4 @@
-window.fmhyData = [
+[
   {
     "name": "Adblocking & Privacy",
     "subcategories": [
@@ -191814,4 +191814,4 @@ window.fmhyData = [
       }
     ]
   }
-];
+]
