@@ -940,7 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <p class="font-body-md text-body-md text-muted-text max-w-xl mx-auto md:mx-0 drop-shadow-md mb-4">${highlightText(mainItem.description || '', searchQuery)}</p>
                 <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                    ${mainTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-1 rounded-full cursor-pointer hover:bg-outline hover:text-primary transition-colors" onclick="handleTagClick(event, '${tag}')">#${tag.toLowerCase()}</span>`).join('')}
+                    ${mainTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-1 rounded-full">#${tag.toLowerCase()}</span>`).join('')}
                 </div>
             </div>
         </div>
@@ -994,7 +994,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <p class="font-label-sm text-label-sm text-muted-text normal-case line-clamp-2 drop-shadow-md mb-3 w-full mx-auto pb-1">${highlightText(sideItem.description || sideDomain, searchQuery)}</p>
                         <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                            ${sideTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-0.5 rounded-full cursor-pointer hover:bg-outline hover:text-primary transition-colors" onclick="handleTagClick(event, '${tag}')">#${tag.toLowerCase()}</span>`).join('')}
+                            ${sideTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-0.5 rounded-full">#${tag.toLowerCase()}</span>`).join('')}
                         </div>
                     </div>
                 </div>
