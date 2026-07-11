@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
 import { AudioToggle, getSharedAudio } from "../components/AudioPlayer";
+import { entered } from "./directory";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -51,6 +53,8 @@ function HomePage() {
 
   const handleEnter = () => {
     if (exiting) return;
+    entered.value = true;
+
     const a = getSharedAudio();
     if (a && a.paused) a.play().catch(() => {});
     if (iframeRef.current && !iframeRef.current.src) {
