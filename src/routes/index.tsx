@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { entered } from "./directory";
 import { AudioToggle, getSharedAudio } from "../components/AudioPlayer";
@@ -30,12 +31,15 @@ const playfair = { fontFamily: "'Playfair Display', serif" };
 
 function HomePage() {
   const navigate = useNavigate();
+  const [exiting, setExiting] = useState(false);
 
   const handleEnter = () => {
+    if (exiting) return;
     const a = getSharedAudio();
     if (a && a.paused) a.play().catch(() => {});
     entered.value = true;
-    navigate({ to: "/directory" });
+    setExiting(true);
+    setTimeout(() => navigate({ to: "/directory" }), 1100);
   };
 
   return (
@@ -43,16 +47,16 @@ function HomePage() {
       className="relative min-h-screen w-full overflow-hidden bg-black text-white"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      <div>
-        <video
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-        />
+      <video
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className={`absolute inset-0 z-0 h-full w-full object-cover ${exiting ? "hero-video-zoom" : ""}`}
+      />
 
+      <div className={exiting ? "hero-content-out" : ""}>
         <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
           <a href="#" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             DPAL
@@ -110,6 +114,8 @@ function HomePage() {
           </button>
         </section>
       </div>
+
+      {exiting && <div className="transition-veil" aria-hidden="true" />}
     </main>
   );
 }

@@ -18,13 +18,15 @@ export const Route = createFileRoute("/directory")({
 function Directory() {
   const navigate = useNavigate();
   const [allowed, setAllowed] = useState(false);
+  const [veilGone, setVeilGone] = useState(false);
 
   useEffect(() => {
     if (entered.value) {
       setAllowed(true);
-    } else {
-      navigate({ to: "/", replace: true });
+      const t = setTimeout(() => setVeilGone(true), 950);
+      return () => clearTimeout(t);
     }
+    navigate({ to: "/", replace: true });
   }, [navigate]);
 
   if (!allowed) return null;
@@ -34,8 +36,10 @@ function Directory() {
       <iframe
         src="/dpal/index.html"
         title="DPAL"
+        className="dir-reveal"
         style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", border: 0 }}
       />
+      {!veilGone && <div className="dir-veil" aria-hidden="true" />}
       <AudioToggle />
     </>
   );
