@@ -131,7 +131,7 @@
     <!-- Fixed Background Video -->
     <video id="bg-video" autoplay muted loop playsinline preload="auto"
         class="fixed inset-0 w-full h-full object-cover z-0 pointer-events-none"
-        style="opacity:0.85; transition: opacity 900ms ease;">
+        style="opacity:0; transition: opacity 900ms ease;">
         <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_055001_8e16d972-3b2b-441c-86ad-2901a54682f9.mp4" type="video/mp4">
     </video>
     <script>
@@ -142,6 +142,19 @@
       const FADE_WINDOW = 0.8; // seconds before end / after start
       let lastTime = 0;
       v.playbackRate = 1;
+      
+      const fadeIn = () => { v.style.opacity = String(BASE_OPACITY); };
+      v.addEventListener('playing', fadeIn);
+      if (!v.paused) fadeIn();
+
+      const playVideo = () => {
+        v.play().then(fadeIn).catch(() => {});
+        window.removeEventListener('pointerdown', playVideo);
+        window.removeEventListener('touchstart', playVideo);
+      };
+      window.addEventListener('pointerdown', playVideo, { once: true });
+      window.addEventListener('touchstart', playVideo, { once: true });
+
       v.addEventListener('timeupdate', function(){
         const d = v.duration || 0;
         if (!d) return;

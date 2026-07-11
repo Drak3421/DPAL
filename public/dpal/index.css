@@ -287,3 +287,13 @@ html.dark #slideOutPanel #panelDesc {
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+/* Hide iOS/Safari native video playback overlay and play button */
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
+}
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+
