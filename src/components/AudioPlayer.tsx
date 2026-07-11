@@ -46,16 +46,23 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
       });
     }
 
-    // Pause music when focus leaves our window (iframe click, new tab, other app playing audio).
-    const onBlur = () => { if (!a.paused) a.pause(); };
-    window.addEventListener("blur", onBlur);
+    // Pause when tab is hidden, or when another <audio>/<video> on the page starts playing.
+    const onVisibility = () => { if (document.hidden && !a.paused) a.pause(); };
+    const onOtherPlay = (e: Event) => {
+      const target = e.target as HTMLMediaElement | null;
+      if (target && target !== a && target instanceof HTMLMediaElement && !a.paused) a.pause();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    document.addEventListener("play", onOtherPlay, true);
 
     return () => {
       a.removeEventListener("play", onPlay);
       a.removeEventListener("pause", onPause);
-      window.removeEventListener("blur", onBlur);
+      document.removeEventListener("visibilitychange", onVisibility);
+      document.removeEventListener("play", onOtherPlay, true);
     };
   }, []);
+
 
 
 
