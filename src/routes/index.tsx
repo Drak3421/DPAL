@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
 import { AudioToggle, getSharedAudio } from "../components/AudioPlayer";
+import { entered } from "./directory";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
