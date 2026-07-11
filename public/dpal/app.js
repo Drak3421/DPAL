@@ -351,23 +351,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 3D Hover Effect ---
+    let tiltTicking = false;
     document.addEventListener('mousemove', (e) => {
         const target = e.target.closest('.tilt-card');
         if (!target) return;
         
-        const rect = target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
-        const rotateY = ((x - centerX) / centerX) * 10;
-        
-        target.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02, 1.02, 1.02)';
-        target.style.zIndex = '30';
-    });
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+
+        if (!tiltTicking) {
+            window.requestAnimationFrame(() => {
+                const rect = target.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+                const rotateY = ((x - centerX) / centerX) * 10;
+                
+                target.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02, 1.02, 1.02)';
+                target.style.zIndex = '30';
+                tiltTicking = false;
+            });
+            tiltTicking = true;
+        }
+    }, { passive: true });
     
     document.addEventListener('mouseout', (e) => {
         const target = e.target.closest('.tilt-card');
@@ -508,10 +518,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { root: null, rootMargin: '-35% 0px -35% 0px', threshold: 0 });
 
-    const revealObserver = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
             }
         });
     }, { root: null, rootMargin: '0px', threshold: 0.1 });
