@@ -43,8 +43,12 @@ export const Route = createFileRoute("/category/$category")({
 });
 
 function CategoryPage() {
-  const { category } = Route.useLoaderData();
-  const total = category.subcategories.reduce((n, s) => n + s.items.length, 0);
+  const { category: catData } = Route.useLoaderData();
+  const category = catData as import("@/data/directory").DirCategory;
+  const total = category.subcategories.reduce(
+    (n: number, s) => n + s.items.length,
+    0,
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
