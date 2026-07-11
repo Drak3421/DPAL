@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import songAsset from "@/assets/deep-breath.mp3.asset.json";
+
+const SONG_URL = "/audio/deep-breath.mp3";
 
 let sharedAudio: HTMLAudioElement | null = null;
 
@@ -13,7 +14,7 @@ if (typeof window !== "undefined") {
 export function getSharedAudio() {
   if (typeof window === "undefined") return null;
   if (!sharedAudio) {
-    sharedAudio = new Audio(songAsset.url);
+    sharedAudio = new Audio(SONG_URL);
     sharedAudio.loop = true;
     sharedAudio.volume = 0.5;
     sharedAudio.preload = "auto";
