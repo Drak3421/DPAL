@@ -30,11 +30,28 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
     a.addEventListener("play", onPlay);
     a.addEventListener("pause", onPause);
     setPlaying(!a.paused);
+
+    // Try autoplay on load; if blocked, start on first user interaction.
+    if (a.paused) {
+      a.play().catch(() => {
+        const start = () => {
+          a.play().catch(() => {});
+          window.removeEventListener("pointerdown", start);
+          window.removeEventListener("keydown", start);
+          window.removeEventListener("touchstart", start);
+        };
+        window.addEventListener("pointerdown", start, { once: true });
+        window.addEventListener("keydown", start, { once: true });
+        window.addEventListener("touchstart", start, { once: true });
+      });
+    }
+
     return () => {
       a.removeEventListener("play", onPlay);
       a.removeEventListener("pause", onPause);
     };
   }, []);
+
 
   const toggle = () => {
     const a = audioRef.current;
