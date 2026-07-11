@@ -171,17 +171,22 @@ function HomePage() {
           }}
         >
           <video
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+            ref={videoRef}
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_031045_0e1165dd-ab48-46e3-ad3d-5fe77f217647.mp4"
             autoPlay
             loop
             muted
             playsInline
             className="absolute inset-0 h-full w-full object-cover"
             style={{
-              transform: exiting ? "scale(1.15)" : "scale(1)",
-              transition: "transform 1400ms cubic-bezier(0.4,0,0.2,1)",
+              transform: exiting ? "scale(1.15)" : `scale(${1 + speedProgress * 0.08})`,
+              filter: `blur(${speedProgress * 3}px)`,
+              transition: exiting
+                ? "transform 1400ms cubic-bezier(0.4,0,0.2,1)"
+                : "transform 200ms ease-out, filter 200ms ease-out",
             }}
           />
+
 
           <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
             <a href="#" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
