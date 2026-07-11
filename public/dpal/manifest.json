@@ -9,9 +9,9 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "app-icon-v2.png",
+      "src": "app-icon-v2.webp",
       "sizes": "192x192 512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any maskable"
     }
   ]

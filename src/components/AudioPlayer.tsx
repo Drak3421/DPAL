@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-const songAsset = { url: "/audio/deep-breath.mp3" };
+import songAsset from "@/assets/deep-breath.mp3.asset.json";
 
 let sharedAudio: HTMLAudioElement | null = null;
+
+// Lazy: only construct the Audio element when actually needed (not at
+// module load). The mp3 is ~2.6 MB, so `preload="none"` avoids fetching
+// it until the user (or an autoplay attempt in the effect) requests play.
+if (typeof window !== "undefined") {
+  getSharedAudio();
+}
 
 export function getSharedAudio() {
   if (typeof window === "undefined") return null;
@@ -12,10 +19,6 @@ export function getSharedAudio() {
     sharedAudio.preload = "auto";
   }
   return sharedAudio;
-}
-
-if (typeof window !== "undefined") {
-  getSharedAudio();
 }
 
 type AudioToggleProps = {
@@ -88,9 +91,19 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
         };
 
         attachToIframes();
+        const loadTargets: HTMLIFrameElement[] = [];
         document.querySelectorAll("iframe").forEach((iframe) => {
           iframe.addEventListener("load", attachToIframes);
+          loadTargets.push(iframe as HTMLIFrameElement);
         });
+        // Ensure the "load" listeners are removed once autoplay succeeds,
+        // otherwise every iframe reload re-attaches listeners forever.
+        const cleanupLoadListeners = () => {
+          loadTargets.forEach((iframe) => iframe.removeEventListener("load", attachToIframes));
+        };
+        window.addEventListener("pointerdown", cleanupLoadListeners, { once: true });
+        window.addEventListener("keydown", cleanupLoadListeners, { once: true });
+        window.addEventListener("touchstart", cleanupLoadListeners, { once: true });
       });
     }
 

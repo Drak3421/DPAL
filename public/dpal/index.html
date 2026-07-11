@@ -14,16 +14,37 @@
         try { localStorage.setItem('theme','dark'); } catch (e) {}
         document.documentElement.classList.add('dark');
     </script>
+    <script>
+        // Auto-detect low-end devices and switch to lite mode.
+        // Triggers on: <=4GB RAM, <=4 CPU cores, save-data on, or 2g/3g connection.
+        // User override: localStorage 'lite' = 'on' | 'off'.
+        (function(){
+            try {
+                var forced = localStorage.getItem('lite');
+                if (forced === 'off') return;
+                var nav = navigator || {};
+                var mem = nav.deviceMemory || 8;
+                var cores = nav.hardwareConcurrency || 8;
+                var conn = nav.connection || {};
+                var slowNet = conn.saveData || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || '');
+                if (forced === 'on' || mem <= 4 || cores <= 4 || slowNet) {
+                    document.documentElement.classList.add('lite');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <meta charset="utf-8"/>
     <!-- Responsive layout for all devices -->
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>DPAL | Directory</title>
     
     <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
     <meta name="description" content="DPAL - The ultimate piracy and media discovery app.">
     <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="index.css">
@@ -103,14 +124,14 @@
                         "section-v": "120px"
                     },
                     fontFamily: {
-                        "display-xl": ["Geist"],
-                        "metric-md": ["Geist"],
-                        "body-md": ["Geist"],
-                        "headline-lg": ["Geist"],
-                        "display-xl-mobile": ["Geist"],
-                        "body-lg": ["Geist"],
-                        "headline-lg-mobile": ["Geist"],
-                        "label-sm": ["Geist"]
+                        "display-xl": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "metric-md": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "body-md": ["DM Sans", "system-ui", "sans-serif"],
+                        "headline-lg": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "display-xl-mobile": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "body-lg": ["DM Sans", "system-ui", "sans-serif"],
+                        "headline-lg-mobile": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "label-sm": ["DM Sans", "system-ui", "sans-serif"]
                     },
                     fontSize: {
                         "display-xl": ["96px", { lineHeight: "1.0", letterSpacing: "-0.04em", fontWeight: "600" }],
@@ -290,7 +311,7 @@
         <nav class="w-full border-b border-grid-line bg-background/80 backdrop-blur-md sticky top-0 z-50">
             <div class="flex justify-between items-center h-16 px-margin max-w-[1400px] mx-auto">
                 <div class="flex items-center gap-3">
-                    <button id="mobileMenuBtn" class="md:hidden material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-1 -ml-2" title="Menu">menu</button>
+                    <button id="mobileMenuBtn" type="button" aria-label="Open navigation menu" class="md:hidden material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer min-w-11 min-h-11 -ml-2 grid place-items-center" title="Menu">menu</button>
                     <div class="font-display-xl-mobile text-headline-lg-mobile tracking-tighter text-primary">
                         DPAL
                     </div>
@@ -312,14 +333,14 @@
                         Windows App
                     </a>
                     <!-- Ad Blocker Toggle -->
-                    <div id="adBlockerToggleContainer" class="flex items-center gap-3 cursor-pointer group mr-4" title="Toggle Ad Blocker">
+                    <div id="adBlockerToggleContainer" role="switch" tabindex="0" aria-label="Toggle ad blocker" class="hidden sm:flex items-center gap-3 cursor-pointer group mr-2 md:mr-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-full" title="Toggle Ad Blocker">
                         <span id="adBlockerIcon" class="material-symbols-outlined text-green-500 transition-colors text-[22px]">sensors</span>
                         <div id="adBlockerTrack" class="w-12 h-6 bg-green-600 rounded-full relative transition-colors duration-300">
                             <div id="adBlockerThumb" class="absolute top-0.5 right-0.5 w-5 h-5 bg-gray-300 rounded-full shadow-sm transition-transform duration-300"></div>
                         </div>
                     </div>
                     <!-- View Toggle -->
-                    <button id="viewToggleBtn" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 hidden md:block" title="Toggle List/Grid View">view_list</button>
+                    <button id="viewToggleBtn" type="button" aria-label="Toggle list or grid view" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 hidden md:block" title="Toggle List/Grid View">view_list</button>
                     <!-- Sort Dropdown -->
                     <div class="relative hidden md:block h-full border-l border-grid-line px-6 py-3">
                         <select id="sortSelect" class="bg-surface-container border border-grid-line text-on-surface font-label-sm text-label-sm px-4 py-2 focus:outline-none focus:border-outline transition-colors rounded-none appearance-none pr-8 cursor-pointer">
@@ -352,7 +373,7 @@
                 
                 <div class="flex justify-between items-center mb-8 md:hidden">
                     <div class="font-display-xl-mobile text-headline-lg-mobile tracking-tighter text-primary">DPAL</div>
-                    <button id="closeSidebarBtn" class="material-symbols-outlined text-muted-text p-2 cursor-pointer bg-surface rounded-full">close</button>
+                    <button id="closeSidebarBtn" type="button" aria-label="Close navigation menu" class="material-symbols-outlined text-muted-text min-w-11 min-h-11 grid place-items-center cursor-pointer bg-surface rounded-full">close</button>
                 </div>
 
                 <h3 class="font-label-sm text-label-sm text-muted-text uppercase tracking-widest mb-6 pl-2">Categories</h3>
@@ -436,7 +457,7 @@
         <div class="relative h-48 w-full border-b border-grid-line shrink-0">
             <div id="panelImage" class="absolute inset-0 bg-cover bg-top opacity-80"></div>
             <div id="panelImageGradient" class="absolute inset-0 bg-gradient-to-t from-surface-container/90 to-transparent"></div>
-            <button id="closePanelBtn" class="absolute top-4 right-4 bg-background/50 hover:bg-background text-on-surface p-2 rounded-full backdrop-blur-md transition-colors material-symbols-outlined z-10 cursor-pointer border-none shadow-sm">close</button>
+            <button id="closePanelBtn" type="button" aria-label="Close details panel" class="absolute top-4 right-4 bg-background/50 hover:bg-background text-on-surface min-w-11 min-h-11 grid place-items-center rounded-full backdrop-blur-md transition-colors material-symbols-outlined z-10 cursor-pointer border-none shadow-sm">close</button>
             <div class="absolute bottom-4 left-6 right-6 flex items-end justify-between">
                 <h2 id="panelTitle" class="font-headline-lg text-headline-lg text-primary drop-shadow-lg leading-tight m-0">Title</h2>
                 <img id="panelIcon" src="" class="w-12 h-12 rounded-lg shadow-lg bg-surface p-1 object-contain">
@@ -462,16 +483,16 @@
         <div id="floatingWidget" class="absolute bottom-6 right-6 z-[310] flex flex-row-reverse items-center bg-surface-container/90 backdrop-blur-md rounded-full shadow-2xl border border-grid-line/50 pointer-events-auto overflow-hidden transition-all duration-300 max-w-[48px] h-12 justify-start touch-none group [&.expanded]:max-w-[300px]" style="margin-bottom: env(safe-area-inset-bottom);">
             
             <!-- Toggle Button (Drag Handle when collapsed, Toggle when clicked) -->
-            <button id="widgetToggleBtn" class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-muted-text hover:text-primary transition-colors cursor-grab active:cursor-grabbing bg-transparent border-none">
+            <button id="widgetToggleBtn" type="button" aria-label="Toggle browser action menu" aria-expanded="false" class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-muted-text hover:text-primary transition-colors cursor-grab active:cursor-grabbing bg-transparent border-none">
                 <span class="material-symbols-outlined text-lg transition-transform duration-300 group-[.expanded]:rotate-180" id="widgetToggleIcon">menu</span>
             </button>
             
             <!-- Expanded Actions -->
             <div id="widgetActions" class="flex items-center gap-1 opacity-0 pointer-events-none transition-all duration-300 px-1 whitespace-nowrap group-[.expanded]:opacity-100 group-[.expanded]:pointer-events-auto">
-                <button id="browserRefreshBtn" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 rounded-full hover:bg-surface-container bg-transparent border-none" title="Refresh">refresh</button>
-                <a id="browserExternalBtn" href="#" target="_blank" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 rounded-full hover:bg-surface-container no-underline" title="Open in System Browser">open_in_new</a>
+                <button id="browserRefreshBtn" type="button" aria-label="Refresh page" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 rounded-full hover:bg-surface-container bg-transparent border-none" title="Refresh">refresh</button>
+                <a id="browserExternalBtn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open page in system browser" class="material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer p-2 rounded-full hover:bg-surface-container no-underline" title="Open in System Browser">open_in_new</a>
                 <div class="w-px h-6 bg-grid-line mx-1"></div>
-                <button id="browserCloseBtn" class="material-symbols-outlined text-red-500 hover:text-red-400 transition-colors cursor-pointer p-2 rounded-full hover:bg-red-500/10 bg-transparent border-none" title="Close">close</button>
+                <button id="browserCloseBtn" type="button" aria-label="Close in-app browser" class="material-symbols-outlined text-red-500 hover:text-red-400 transition-colors cursor-pointer p-2 rounded-full hover:bg-red-500/10 bg-transparent border-none" title="Close">close</button>
             </div>
         </div>
 
@@ -483,7 +504,7 @@
         </div>
     </div>
     <!-- Add Custom Site FAB -->
-    <button id="addCustomSiteFab" onclick="window.openAddSiteModal()" class="fixed bottom-6 right-6 z-[200] w-14 h-14 bg-primary text-background rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-none group" title="Add Custom Website" style="margin-bottom: env(safe-area-inset-bottom);">
+    <button id="addCustomSiteFab" type="button" aria-label="Add custom website" onclick="window.openAddSiteModal()" class="fixed bottom-6 right-6 z-[200] w-14 h-14 bg-primary text-background rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-none group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" title="Add Custom Website" style="margin-bottom: env(safe-area-inset-bottom);">
         <span class="material-symbols-outlined text-3xl transition-transform group-hover:rotate-90">add</span>
     </button>
 
@@ -511,19 +532,19 @@
         <div id="addSiteModal" class="bg-surface-container border border-grid-line shadow-2xl rounded-2xl w-full max-w-md p-6 scale-95 transition-transform duration-200">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-headline-md text-on-surface">Add Custom Site</h2>
-                <button id="closeAddSiteBtn" class="material-symbols-outlined text-muted-text hover:text-on-surface bg-transparent border-none cursor-pointer">close</button>
+                <button id="closeAddSiteBtn" type="button" aria-label="Close add site dialog" class="material-symbols-outlined text-muted-text hover:text-on-surface min-w-11 min-h-11 grid place-items-center bg-transparent border-none cursor-pointer">close</button>
             </div>
             <form id="addSiteForm" class="flex flex-col gap-4">
                 <div>
-                    <label class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Website URL</label>
+                    <label for="siteUrlInput" class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Website URL</label>
                     <input type="url" id="siteUrlInput" required class="w-full bg-surface-container-low border border-grid-line rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="https://example.com">
                 </div>
                 <div>
-                    <label class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Name</label>
+                    <label for="siteNameInput" class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Name</label>
                     <input type="text" id="siteNameInput" required class="w-full bg-surface-container-low border border-grid-line rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="Example Site">
                 </div>
                 <div>
-                    <label class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Description (Optional)</label>
+                    <label for="siteDescInput" class="block text-sm font-label-sm text-muted-text mb-1 uppercase tracking-wider">Description (Optional)</label>
                     <input type="text" id="siteDescInput" class="w-full bg-surface-container-low border border-grid-line rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="What is this site about?">
                 </div>
                 <button type="submit" class="mt-4 w-full bg-primary text-background font-label-md py-3 rounded-lg hover:bg-primary/90 transition-colors cursor-pointer shadow-lg shadow-primary/20">Add to Dashboard</button>
@@ -531,9 +552,9 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
-    <script src="data.js"></script>
-    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script defer src="data.js"></script>
+    <script defer src="app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

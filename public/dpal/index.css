@@ -1,7 +1,6 @@
 /* Tailwind CSS is injected via CDN, so this file only contains custom overrides */
 
 :root {
-  /* LIGHT MODE VARS - Vercel/Linear Minimalist */
   color-scheme: light;
   --bg: #ffffff;
   --on-bg: #111111;
@@ -12,27 +11,41 @@
   --surface-container: #fafafa;
   --surface-container-lowest: #ffffff;
   --grid-line: #eaeaea;
-  --muted-text: #666666;
+  --muted-text: #4a4a4a;
   --on-surface: #111111;
   --outline: #cccccc;
 }
 
 html.dark {
-  /* DARK MODE VARS — cinematic dusk palette (warm cream + amber accents) */
+  /* Noir & Gold — locked palette */
   color-scheme: dark;
-  --bg: #0a0c14;
-  --on-bg: #f5ecd9;
-  --primary: #e8b86a;
-  --on-primary: #1a1408;
+  --bg: #0d0d0d;
+  --on-bg: #ffffff;
+  --primary: #c9a84c;
+  --primary-glow: #f0d78c;
+  --on-primary: #0d0d0d;
   --surface: transparent;
-  --surface-container-low: rgba(255,255,255,0.03);
-  --surface-container: rgba(255,255,255,0.05);
+  --surface-container-low: rgba(255,255,255,0.035);
+  --surface-container: rgba(26,26,26,0.72);
   --surface-container-lowest: transparent;
-  --grid-line: rgba(232,184,106,0.12);
-  --muted-text: #b8ac93;
-  --on-surface: #f5ecd9;
-  --outline: rgba(232,184,106,0.35);
+  --grid-line: rgba(201,168,76,0.14);
+  --muted-text: #8a8a8a;
+  --on-surface: #ededed;
+  --outline: rgba(240,215,140,0.4);
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
 }
+
+/* Type foundations */
+html.dark body { font-family: var(--font-body); font-feature-settings: "ss01","cv11"; }
+html.dark h1, html.dark h2, html.dark h3, html.dark h4,
+html.dark .font-display-xl, html.dark .font-display-xl-mobile,
+html.dark .font-headline-lg, html.dark .font-headline-lg-mobile {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    font-weight: 600;
+}
+html.dark .font-label-sm { font-family: var(--font-body); letter-spacing: 0.14em; }
 
 html {
     scrollbar-gutter: stable;
@@ -40,10 +53,51 @@ html {
     background-color: var(--bg);
 }
 
-html { background-color: #0a0a0c; }
+html { background-color: #0d0d0d; }
 body {
     background-color: transparent;
     color: var(--on-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+}
+
+/* Momentum scroll on iOS + gentle overscroll on major scroll containers */
+#contentContainer, .no-scrollbar, #commandResults, #slideOutPanel {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Universal focus-visible — gold ring for keyboard users */
+*:focus { outline: none; }
+*:focus-visible {
+    outline: 2px solid var(--primary-glow, #f0d78c);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* 44x44 minimum tap targets on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    button.material-symbols-outlined,
+    a.material-symbols-outlined,
+    .fav-btn, .del-btn {
+        min-width: 44px;
+        min-height: 44px;
+        display: inline-grid;
+        place-items: center;
+    }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+    #leftSidebar { animation: none !important; }
 }
 
 /* Custom Scrollbar for Dark Theme */
@@ -52,14 +106,14 @@ body {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #131315; 
+    background: #131313;
 }
 ::-webkit-scrollbar-thumb {
-    background: #353437; 
+    background: rgba(201,168,76,0.35);
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #5d5f5f; 
+    background: rgba(240,215,140,0.6);
 }
 
 /* Thin accessible scrollbar for horizontal nav elements */
@@ -88,17 +142,15 @@ body {
 
 /* Spotlight Cinematic Scroll Effect - GPU Accelerated */
 .spotlight-card {
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    opacity: 0.5;
-    transform: scale(0.96) translateZ(0);
-    will-change: opacity, transform;
-    backface-visibility: hidden; /* Prevent flickering */
+    /* Spotlight scale/opacity effect disabled — caused perceived layout shift
+       when returning from a card view. Cards render fully at rest. */
+    opacity: 1;
+    transform: none;
 }
 
 .spotlight-card.spotlight-focused {
     opacity: 1;
-    transform: scale(1) translateZ(0);
-    z-index: 10;
+    transform: none;
 }
 
 /* Simulate Hover Effects for Spotlight Focused Cards */
@@ -124,19 +176,27 @@ body {
 
 /* Staggered Reveal Animations */
 .reveal {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    /* transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); */
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
 
 .reveal.is-visible {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+/* Fallback: if JS observer never fires (edge cases), don't leave content invisible */
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .spotlight-card { opacity: 1 !important; transform: none !important; }
 }
 
 /* Use a CSS variable for staggered delays */
 .stagger > .reveal {
-    transition-delay: calc(var(--stagger-idx, 0) * 0.1s);
+    transition-delay: calc(var(--stagger-idx, 0) * 0.06s);
 }
 @keyframes pop {
     0% { transform: scale(1); }
@@ -170,106 +230,240 @@ body {
 #leftSidebar #navChips a:hover { color: #fff !important; }
 #leftSidebar h3 { color: rgba(255,255,255,0.75) !important; }
 
-/* Sidebar: translucent blend with page background + warm amber glow */
+/* Sidebar — quieter gold hairline, no pulsing glow */
 #leftSidebar {
-    background: linear-gradient(180deg, rgba(20,14,8,0.72) 0%, rgba(12,10,8,0.55) 100%);
+    background: linear-gradient(180deg, rgba(20,17,10,0.82) 0%, rgba(13,13,13,0.7) 100%);
     backdrop-filter: blur(18px) saturate(140%);
-    border: 1px solid rgba(232, 184, 106, 0.28) !important;
-    box-shadow:
-        0 0 24px rgba(232, 184, 106, 0.25),
-        0 0 60px rgba(212, 149, 79, 0.15),
-        inset 0 0 1px rgba(245, 236, 217, 0.15);
-    border-radius: 0 16px 16px 0;
-    animation: sidebarGlow 4s ease-in-out infinite alternate;
-}
-@keyframes sidebarGlow {
-    0%   { box-shadow: 0 0 20px rgba(232,184,106,0.22), 0 0 50px rgba(212,149,79,0.12), inset 0 0 1px rgba(245,236,217,0.15); }
-    100% { box-shadow: 0 0 34px rgba(240,201,130,0.42), 0 0 70px rgba(232,184,106,0.25), inset 0 0 1px rgba(245,236,217,0.22); }
+    border: 1px solid rgba(201,168,76,0.22) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(240,215,140,0.06);
+    border-radius: 0 18px 18px 0;
 }
 @media (max-width: 767px) {
     #leftSidebar {
-        background: rgba(14,10,6,0.98);
-        backdrop-filter: none;
-        border-radius: 0 18px 18px 0;
-        animation: none;
-    }
-    nav.sticky {
-        background: rgba(12,10,8,0.98) !important;
-        backdrop-filter: none;
+        background: rgba(13,13,13,0.94);
+        backdrop-filter: blur(24px) saturate(140%);
     }
 }
 #leftSidebar #navChips a {
-    color: rgba(245,236,217,0.92) !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,0.9) !important;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: background-color .2s ease, color .2s ease;
 }
-#leftSidebar #navChips a:hover { color: #f0c982 !important; }
-#leftSidebar h3 { color: rgba(232,184,106,0.75) !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5); letter-spacing: 0.15em; }
+#leftSidebar #navChips a:hover {
+    color: #ffffff !important;
+    background: rgba(201,168,76,0.08);
+}
+#leftSidebar h3 {
+    color: rgba(201,168,76,0.7) !important;
+    letter-spacing: 0.18em;
+    font-size: 11px;
+}
 
 /* ===== Top nav — blend with cinematic background ===== */
 nav.sticky {
-    background: linear-gradient(180deg, rgba(12,10,8,0.75) 0%, rgba(12,10,8,0.35) 100%) !important;
+    background: linear-gradient(180deg, rgba(13,13,13,0.9) 0%, rgba(13,13,13,0.55) 100%) !important;
     backdrop-filter: blur(20px) saturate(150%);
-    border-bottom: 1px solid rgba(232,184,106,0.12) !important;
+    border-bottom: 1px solid rgba(201,168,76,0.14) !important;
 }
-nav.sticky .text-primary { color: #f0c982 !important; }
+nav.sticky .text-primary { color: var(--primary-glow) !important; font-family: var(--font-display); font-weight: 700; letter-spacing: -0.03em; }
+
+/* Reflow top nav on narrow widths — hide desktop-only widgets earlier */
+@media (max-width: 640px) {
+    nav.sticky .h-16 { padding-left: 16px; padding-right: 16px; }
+    #adBlockerToggleContainer { display: none !important; }
+}
 
 /* Top-bar action buttons → minimal ghost style with amber accent */
 #downloadAndroidBtn,
 #downloadWindowsBtn {
     background: transparent !important;
-    border: 1px solid rgba(245,236,217,0.14) !important;
-    color: rgba(245,236,217,0.85) !important;
+    border: 1px solid rgba(240,215,140,0.18) !important;
+    color: #ffffff !important;
     border-radius: 999px !important;
-    padding: 6px 14px !important;
+    padding: 8px 16px !important;
     font-weight: 500;
     letter-spacing: 0.01em;
+    min-height: 40px;
     backdrop-filter: blur(6px);
     transition: all .25s ease;
 }
 #downloadAndroidBtn:hover,
 #downloadWindowsBtn:hover {
-    background: rgba(232,184,106,0.08) !important;
-    border-color: rgba(232,184,106,0.5) !important;
-    color: #f0c982 !important;
-    box-shadow: 0 0 14px rgba(232,184,106,0.25);
+    background: rgba(201,168,76,0.1) !important;
+    border-color: rgba(240,215,140,0.55) !important;
+    color: var(--primary-glow) !important;
+    box-shadow: 0 0 18px rgba(201,168,76,0.28);
 }
 #downloadAndroidBtn .material-symbols-outlined,
-#downloadWindowsBtn .material-symbols-outlined { opacity: 0.8; color: #e8b86a; }
+#downloadWindowsBtn .material-symbols-outlined { opacity: 0.85; color: var(--primary); }
 
 #sortSelect,
 #searchInput {
     background: transparent !important;
-    border: 1px solid rgba(245,236,217,0.14) !important;
-    color: rgba(245,236,217,0.9) !important;
+    border: 1px solid rgba(240,215,140,0.18) !important;
+    color: #ffffff !important;
     border-radius: 999px !important;
-    padding: 6px 14px !important;
+    min-height: 40px;
     transition: all .25s ease;
 }
+#sortSelect { padding: 8px 32px 8px 16px !important; }
+#searchInput { padding: 8px 16px 8px 32px !important; }
 #sortSelect:hover,
-#searchInput:hover { border-color: rgba(232,184,106,0.35) !important; }
-#searchInput::placeholder { color: rgba(245,236,217,0.4) !important; }
+#searchInput:hover { border-color: rgba(240,215,140,0.4) !important; }
+#searchInput::placeholder { color: rgba(255,255,255,0.45) !important; }
 #searchInput:focus {
-    border-color: rgba(232,184,106,0.6) !important;
-    box-shadow: 0 0 14px rgba(232,184,106,0.3);
-    color: #f0c982 !important;
+    border-color: rgba(240,215,140,0.7) !important;
+    box-shadow: 0 0 18px rgba(201,168,76,0.35);
+    color: #ffffff !important;
 }
-#sortSelect option { background: #14100a; color: #f5ecd9; }
+#sortSelect option { background: #1a1a1a; color: #ffffff; }
 
 /* Headline + hero accents */
-h1, h2, h3.font-display-xl, .text-primary { color: #f5ecd9 !important; }
-main section .bg-primary { background: #e8b86a !important; }
+html.dark h1, html.dark h2, html.dark h3.font-display-xl { color: #ffffff !important; }
+html.dark main section .bg-primary { background: var(--primary) !important; }
+html.dark main section h1.text-primary,
+html.dark main section h2.text-primary { color: var(--primary-glow) !important; }
 
 /* Category chip active/hover state */
 #navChips a.active,
 #navChips a[aria-current="page"] {
-    background: rgba(232,184,106,0.12) !important;
-    color: #f0c982 !important;
-    border-left: 2px solid #e8b86a !important;
+    background: linear-gradient(90deg, rgba(201,168,76,0.18), rgba(201,168,76,0.02)) !important;
+    color: var(--primary-glow) !important;
+    border-left: 2px solid var(--primary) !important;
 }
 
 /* Soften divider lines in top nav */
 nav.sticky .border-l,
-nav.sticky .border-grid-line { border-color: rgba(255,255,255,0.08) !important; }
+nav.sticky .border-grid-line { border-color: rgba(240,215,140,0.1) !important; }
+
+/* ===== Bento tiles ===== */
+/* Round + soften the card chunks and their inner grid dividers */
+html.dark #contentContainer > section > div.grid,
+html.dark #contentContainer > div.grid {
+    border: 1px solid rgba(201,168,76,0.16) !important;
+    background: rgba(201,168,76,0.1) !important; /* becomes the hairline color between cells */
+    border-radius: 20px !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(240,215,140,0.06);
+    overflow: hidden;
+}
+html.dark #contentContainer .tilt-card,
+html.dark #contentContainer .bg-surface-container-lowest {
+    background-color: #131313 !important;
+    transition: background-color .4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform .4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow .4s cubic-bezier(0.16, 1, 0.3, 1);
+    contain: layout paint style;
+    transform: translate3d(0,0,0);
+    backface-visibility: hidden;
+}
+html.dark #contentContainer .tilt-card:hover,
+html.dark #contentContainer .bg-surface-container-lowest:hover {
+    background-color: #1a1a1a !important;
+    box-shadow: 0 0 0 1px rgba(240,215,140,0.18);
+}
+/* Cards inside grids inherit the gold hairline via the outer bg, so no extra borders */
+html.dark #contentContainer .tilt-card h3,
+html.dark #contentContainer .tilt-card h4 {
+    color: #ffffff !important;
+}
+html.dark #contentContainer .tilt-card .text-primary { color: #ffffff !important; }
+html.dark #contentContainer .tilt-card .bg-primary { background: var(--primary) !important; color: var(--on-primary) !important; }
+html.dark #contentContainer .tilt-card p,
+html.dark #contentContainer .tilt-card .text-muted-text,
+html.dark #contentContainer .tilt-card .text-on-surface { color: #8a8a8a !important; }
+html.dark #contentContainer .tilt-card .bg-surface-container,
+html.dark #contentContainer .tilt-card .bg-surface-container-low {
+    background-color: rgba(201,168,76,0.1) !important;
+}
+
+/* Sticky category headers — gold accent line, DM Sans caps */
+html.dark #contentContainer section .sticky {
+    background: linear-gradient(180deg, rgba(13,13,13,0.95), rgba(13,13,13,0.75)) !important;
+    border-color: rgba(201,168,76,0.18) !important;
+    border-radius: 12px;
+    transition: background-color .4s ease, border-color .4s ease, box-shadow .4s ease;
+}
+
+/* Lazy-loaded screenshots gently fade in when the src lands */
+.lazy-image {
+    transition: opacity .8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform .8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Skeleton shimmer while screenshots load */
+@keyframes skeletonShimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.skeleton-bg:not([style*="background-image"]) {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.02) 0%,
+        rgba(201,168,76,0.06) 50%,
+        rgba(255,255,255,0.02) 100%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.8s ease-in-out infinite;
+}
+
+/* Style containment on cards is safe; skip content-visibility on grids
+   (mis-guessed intrinsic sizes cause scrollbar jumps as tiles hydrate). */
+
+/* Smoother panel + sidebar slide-in */
+#slideOutPanel,
+#leftSidebar {
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.35s ease;
+    will-change: transform;
+}
+
+/* Smoother backdrop overlays */
+#slideOutOverlay,
+#sidebarOverlay,
+#commandPaletteOverlay,
+#addSiteOverlay {
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Softer nav link hover */
+nav.sticky a, nav.sticky button {
+    transition: color .25s ease, background-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+/* (Removed) button :active scale — caused a brief black flash on some
+   mobile browsers when combined with the fixed iframe layer. */
+
+/* Cut backdrop-filter cost on low-end / mobile — biggest smoothness win on phones */
+@media (max-width: 768px) {
+    nav.sticky { backdrop-filter: blur(12px) saturate(140%); }
+    #leftSidebar { backdrop-filter: blur(14px) saturate(140%); }
+}
+html.dark #contentContainer section .sticky h2 {
+    color: var(--primary-glow) !important;
+    letter-spacing: 0.2em;
+}
+
+/* Hero — slightly softer, better mobile spacing */
+html.dark main section h1 {
+    background: linear-gradient(180deg, #f0d78c 0%, #c9a84c 120%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+html.dark main section .absolute.-left-1 { background: var(--primary) !important; box-shadow: 0 0 12px var(--primary-glow); }
+
+/* Selection */
+html.dark ::selection { background: var(--primary); color: var(--on-primary); }
+
+/* Command palette — align with new tokens */
+html.dark #commandPalette {
+    background: rgba(19,19,19,0.98) !important;
+    border-color: rgba(201,168,76,0.25) !important;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+}
+
+/* Slide-out panel — align amber tones */
+html.dark #slideOutPanel { background-color: #131313 !important; border-left-color: rgba(201,168,76,0.25) !important; }
+html.dark #panelImageGradient { background-image: linear-gradient(to top, #131313 0%, transparent 100%) !important; }
 
 /* Slide-out Panel background fix for high readability */
 #slideOutPanel {
@@ -288,7 +482,7 @@ html.dark #panelImageGradient {
     background-image: linear-gradient(to top, #0d0f16 0%, transparent 100%) !important;
 }
 html.dark #slideOutPanel #panelDesc {
-    color: #e5dec9 !important;
+    color: #cfcfcf !important;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
@@ -300,5 +494,45 @@ video::-webkit-media-controls-start-playback-button {
 video::-webkit-media-controls {
     display: none !important;
 }
+
+/* ========================================================================
+   LITE MODE — auto-applied on low-end devices (low RAM, slow CPU, save-data,
+   or slow connection). Strips blurs, shadows, gradients, and animations.
+   ======================================================================== */
+html.lite *,
+html.lite *::before,
+html.lite *::after {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    text-shadow: none !important;
+}
+html.lite .reveal { opacity: 1 !important; transform: none !important; }
+html.lite .spotlight-card { opacity: 1 !important; transform: none !important; }
+html.lite .skeleton-bg { background: rgba(255,255,255,0.04) !important; }
+html.lite nav.sticky,
+html.lite #leftSidebar,
+html.lite #commandPalette,
+html.lite #slideOutPanel {
+    background: #131313 !important;
+    box-shadow: none !important;
+}
+html.lite #contentContainer > section > div.grid,
+html.lite #contentContainer > div.grid {
+    box-shadow: none !important;
+}
+html.lite #contentContainer .tilt-card:hover,
+html.lite #contentContainer .bg-surface-container-lowest:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+html.lite main section h1 {
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important;
+}
+html.lite .heart-particle { display: none !important; }
 
 

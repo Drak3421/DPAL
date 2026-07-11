@@ -350,43 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 3D Hover Effect ---
-    let tiltTicking = false;
-    document.addEventListener('mousemove', (e) => {
-        if (window.matchMedia("(hover: none)").matches) return;
-        const target = e.target.closest('.tilt-card');
-        if (!target) return;
-        
-        const clientX = e.clientX;
-        const clientY = e.clientY;
-
-        if (!tiltTicking) {
-            window.requestAnimationFrame(() => {
-                const rect = target.getBoundingClientRect();
-                const x = clientX - rect.left;
-                const y = clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
-                const rotateY = ((x - centerX) / centerX) * 10;
-                
-                target.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02, 1.02, 1.02)';
-                target.style.zIndex = '30';
-                tiltTicking = false;
-            });
-            tiltTicking = true;
-        }
-    }, { passive: true });
-    
-    document.addEventListener('mouseout', (e) => {
-        const target = e.target.closest('.tilt-card');
-        if (!target) return;
-        if (e.relatedTarget && target.contains(e.relatedTarget)) return;
-        target.style.transform = ''; // Clear inline transform so CSS classes take over!
-        target.style.zIndex = ''; // Clear inline zIndex
-    });
+    // --- 3D Hover Effect (disabled — cards no longer tilt/follow the cursor) ---
 
     document.addEventListener('click', (e) => {
         const card = e.target.closest('.tilt-card');
@@ -952,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <p class="font-body-md text-body-md text-muted-text max-w-xl mx-auto md:mx-0 drop-shadow-md mb-4">${highlightText(mainItem.description || '', searchQuery)}</p>
                 <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                    ${mainTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-1 rounded-full">#${tag.toLowerCase()}</span>`).join('')}
+                    ${mainTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-1 rounded-full cursor-pointer hover:bg-outline hover:text-primary transition-colors" onclick="handleTagClick(event, '${tag}')">#${tag.toLowerCase()}</span>`).join('')}
                 </div>
             </div>
         </div>
@@ -1006,7 +970,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <p class="font-label-sm text-label-sm text-muted-text normal-case line-clamp-2 drop-shadow-md mb-3 w-full mx-auto pb-1">${highlightText(sideItem.description || sideDomain, searchQuery)}</p>
                         <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                            ${sideTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-0.5 rounded-full">#${tag.toLowerCase()}</span>`).join('')}
+                            ${sideTags.map(tag => `<span class="font-label-sm text-[10px] text-muted-text bg-surface-container-low px-2 py-0.5 rounded-full cursor-pointer hover:bg-outline hover:text-primary transition-colors" onclick="handleTagClick(event, '${tag}')">#${tag.toLowerCase()}</span>`).join('')}
                         </div>
                     </div>
                 </div>

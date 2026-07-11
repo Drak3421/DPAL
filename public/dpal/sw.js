@@ -1,17 +1,21 @@
-const CACHE_NAME = 'fmhy-cache-v2';
+const CACHE_NAME = 'fmhy-cache-v8';
+// The SW is registered from /dpal/index.html, so its scope is /dpal/.
+// Cache assets must be addressed relative to that scope — absolute
+// paths like '/app.js' resolve at the site root and 404.
+const PRECACHE_URLS = [
+    './',
+    './index.html',
+    './app.js',
+    './data.js',
+    './index.css',
+    './app-icon-v2.webp',
+];
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             // Cache core assets immediately so the app works offline on first disconnect
-            return cache.addAll([
-                '/',
-                '/index.html',
-                '/app.js',
-                '/data.js',
-                '/index.css',
-                '/app-icon-v2.png'
-            ]);
+            return cache.addAll(PRECACHE_URLS);
         }).catch(err => console.log('Cache addAll failed', err))
     );
     self.skipWaiting();
