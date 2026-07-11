@@ -164,3 +164,8 @@ body {
     pointer-events: none;
     animation: particle-up 0.6s ease-out forwards;
 }
+
+/* Sidebar text visibility fix */
+#leftSidebar #navChips a { color: rgba(255,255,255,0.92) !important; }
+#leftSidebar #navChips a:hover { color: #fff !important; }
+#leftSidebar h3 { color: rgba(255,255,255,0.75) !important; }
