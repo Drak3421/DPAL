@@ -46,11 +46,17 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
       });
     }
 
+    // Pause music when focus leaves our window (iframe click, new tab, other app playing audio).
+    const onBlur = () => { if (!a.paused) a.pause(); };
+    window.addEventListener("blur", onBlur);
+
     return () => {
       a.removeEventListener("play", onPlay);
       a.removeEventListener("pause", onPause);
+      window.removeEventListener("blur", onBlur);
     };
   }, []);
+
 
 
   const toggle = () => {
