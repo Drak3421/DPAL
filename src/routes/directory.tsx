@@ -1,11 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { AudioToggle } from "../components/AudioPlayer";
 
-// Shared flag used by the landing page to detect direct navigation
+// Shared flag set by the landing page when the user clicks "Enter".
 export const entered = { value: false };
 
 export const Route = createFileRoute("/directory")({
+  beforeLoad: () => {
+    // On a hard reload or direct visit, send users back to the landing page.
+    if (typeof window !== "undefined" && !entered.value) {
+      throw redirect({ to: "/" });
+    }
+  },
   component: Directory,
   head: () => ({
     meta: [
@@ -16,8 +22,6 @@ export const Route = createFileRoute("/directory")({
 });
 
 function Directory() {
-  entered.value = true;
-
   return (
     <main className="fixed inset-0 bg-black">
       <iframe
