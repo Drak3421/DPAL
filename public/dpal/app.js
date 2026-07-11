@@ -86,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // trigger reflow
         void overlay.offsetWidth;
         overlay.classList.remove('opacity-0');
-        panel.classList.remove('translate-x-full');
+        panel.classList.remove('is-closing', 'translate-x-full');
+        panel.classList.add('is-opening');
         lockAppScroll();
     };
 
@@ -94,9 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const panel = document.getElementById('slideOutPanel');
         const overlay = document.getElementById('slideOutOverlay');
         overlay.classList.add('opacity-0');
-        panel.classList.add('translate-x-full');
+        panel.classList.add('is-closing');
+        panel.classList.remove('is-opening');
         unlockAppScroll();
-        setTimeout(() => overlay.classList.add('hidden'), 300);
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            panel.classList.remove('is-closing');
+            panel.classList.add('translate-x-full');
+        }, 400);
     }
     
     document.getElementById('closePanelBtn')?.addEventListener('click', closePanel);
