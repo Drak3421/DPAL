@@ -49,6 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     };
 
+    // Tell the React shell to pause its background music when a nested website inside
+    // DPAL's in-app browser takes focus. Cross-origin iframes do not expose their
+    // internal video/audio events, so focus transfer is the reliable browser-safe signal.
+    window.pauseHostBackgroundAudio = function(reason = 'embedded_browser_focus') {
+        try {
+            window.parent?.postMessage({ type: 'DPAL_PAUSE_BACKGROUND_AUDIO', reason }, window.location.origin);
+        } catch (e) {}
+    };
+
     // --- Slide-out Panel ---
     window.openPanel = function(itemStr, domain, screenshot) {
         const item = JSON.parse(decodeURIComponent(itemStr));
@@ -332,6 +341,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('browserRefreshBtn')?.addEventListener('click', () => {
         const iframe = document.getElementById('browserIframe');
         iframe.src = iframe.src;
+    });
+
+    window.addEventListener('blur', () => {
+        const modal = document.getElementById('browserModal');
+        if (modal && !modal.classList.contains('hidden')) {
+            window.pauseHostBackgroundAudio('embedded_browser_interaction');
+        }
     });
 
     // --- 3D Hover Effect ---
