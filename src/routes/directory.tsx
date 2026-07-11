@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { AudioToggle } from "../components/AudioPlayer";
 
@@ -7,7 +8,6 @@ export const entered = { value: false };
 
 export const Route = createFileRoute("/directory")({
   beforeLoad: () => {
-    // On a hard reload or direct visit, send users back to the landing page.
     if (!entered.value) {
       throw redirect({ to: "/" });
     }
@@ -23,12 +23,28 @@ export const Route = createFileRoute("/directory")({
 });
 
 function Directory() {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <main className="fixed inset-0 bg-black">
       <iframe
         src="/dpal/index.html"
         title="DPAL Directory"
-        className="dir-reveal fixed inset-0 h-screen w-screen border-0 bg-black"
+        onLoad={() => setLoaded(true)}
+        className="fixed inset-0 h-screen w-screen border-0 bg-black"
+        style={{
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 500ms ease-out",
+        }}
+      />
+      {/* Black cover stays until iframe reports loaded */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 bg-black"
+        style={{
+          opacity: loaded ? 0 : 1,
+          transition: "opacity 500ms ease-out",
+        }}
       />
       <AudioToggle />
     </main>
