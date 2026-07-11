@@ -265,3 +265,25 @@ main section .bg-primary { background: #e8b86a !important; }
 /* Soften divider lines in top nav */
 nav.sticky .border-l,
 nav.sticky .border-grid-line { border-color: rgba(255,255,255,0.08) !important; }
+
+/* Slide-out Panel background fix for high readability */
+#slideOutPanel {
+    background-color: #ffffff !important;
+}
+#panelImageGradient {
+    background-image: linear-gradient(to top, #ffffff 0%, transparent 100%) !important;
+}
+
+html.dark #slideOutPanel {
+    background-color: #0d0f16 !important;
+    border-left: 1px solid rgba(232, 184, 106, 0.25) !important;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+}
+html.dark #panelImageGradient {
+    background-image: linear-gradient(to top, #0d0f16 0%, transparent 100%) !important;
+}
+html.dark #slideOutPanel #panelDesc {
+    color: #e5dec9 !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
