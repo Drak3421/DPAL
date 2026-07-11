@@ -18,20 +18,20 @@
 }
 
 html.dark {
-  /* DARK MODE VARS - OLED Pitch Black */
+  /* DARK MODE VARS — cinematic dusk palette (warm cream + amber accents) */
   color-scheme: dark;
-  --bg: #000000;
-  --on-bg: #e5e5e5;
-  --primary: #ffffff;
-  --on-primary: #000000;
-  --surface: #000000;
-  --surface-container-low: #0a0a0a;
-  --surface-container: #050505;
-  --surface-container-lowest: #000000;
-  --grid-line: #1a1a1a;
-  --muted-text: #737373;
-  --on-surface: #e5e5e5;
-  --outline: #262626;
+  --bg: #0a0c14;
+  --on-bg: #f5ecd9;
+  --primary: #e8b86a;
+  --on-primary: #1a1408;
+  --surface: transparent;
+  --surface-container-low: rgba(255,255,255,0.03);
+  --surface-container: rgba(255,255,255,0.05);
+  --surface-container-lowest: transparent;
+  --grid-line: rgba(232,184,106,0.12);
+  --muted-text: #b8ac93;
+  --on-surface: #f5ecd9;
+  --outline: rgba(232,184,106,0.35);
 }
 
 html {
