@@ -9,8 +9,13 @@ export function getSharedAudio() {
     sharedAudio = new Audio(songAsset.url);
     sharedAudio.loop = true;
     sharedAudio.volume = 0.5;
+    sharedAudio.preload = "auto";
   }
   return sharedAudio;
+}
+
+if (typeof window !== "undefined") {
+  getSharedAudio();
 }
 
 type AudioToggleProps = {
@@ -36,13 +41,56 @@ export function AudioToggle({ variant = "floating" }: AudioToggleProps) {
       a.play().catch(() => {
         const start = () => {
           a.play().catch(() => {});
+          
+          // Remove from parent
           window.removeEventListener("pointerdown", start);
+          window.removeEventListener("mousedown", start);
+          window.removeEventListener("click", start);
           window.removeEventListener("keydown", start);
           window.removeEventListener("touchstart", start);
+
+          // Remove from all iframes
+          document.querySelectorAll("iframe").forEach((iframe) => {
+            try {
+              const doc = iframe.contentDocument || iframe.contentWindow?.document;
+              if (doc) {
+                doc.removeEventListener("pointerdown", start);
+                doc.removeEventListener("mousedown", start);
+                doc.removeEventListener("click", start);
+                doc.removeEventListener("keydown", start);
+                doc.removeEventListener("touchstart", start);
+              }
+            } catch (err) {}
+          });
         };
+
+        // Add to parent
         window.addEventListener("pointerdown", start, { once: true });
+        window.addEventListener("mousedown", start, { once: true });
+        window.addEventListener("click", start, { once: true });
         window.addEventListener("keydown", start, { once: true });
         window.addEventListener("touchstart", start, { once: true });
+
+        // Add to all current iframes and listen for their loads
+        const attachToIframes = () => {
+          document.querySelectorAll("iframe").forEach((iframe) => {
+            try {
+              const doc = iframe.contentDocument || iframe.contentWindow?.document;
+              if (doc) {
+                doc.addEventListener("pointerdown", start, { once: true });
+                doc.addEventListener("mousedown", start, { once: true });
+                doc.addEventListener("click", start, { once: true });
+                doc.addEventListener("keydown", start, { once: true });
+                doc.addEventListener("touchstart", start, { once: true });
+              }
+            } catch (err) {}
+          });
+        };
+
+        attachToIframes();
+        document.querySelectorAll("iframe").forEach((iframe) => {
+          iframe.addEventListener("load", attachToIframes);
+        });
       });
     }
 
