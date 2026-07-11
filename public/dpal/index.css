@@ -188,9 +188,14 @@ body {
 }
 @media (max-width: 767px) {
     #leftSidebar {
-        background: rgba(14,10,6,0.9);
-        backdrop-filter: blur(24px) saturate(140%);
+        background: rgba(14,10,6,0.98);
+        backdrop-filter: none;
         border-radius: 0 18px 18px 0;
+        animation: none;
+    }
+    nav.sticky {
+        background: rgba(12,10,8,0.98) !important;
+        backdrop-filter: none;
     }
 }
 #leftSidebar #navChips a {

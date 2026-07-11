@@ -353,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3D Hover Effect ---
     let tiltTicking = false;
     document.addEventListener('mousemove', (e) => {
+        if (window.matchMedia("(hover: none)").matches) return;
         const target = e.target.closest('.tilt-card');
         if (!target) return;
         
