@@ -1,5 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+
+import { AudioToggle } from "../components/AudioPlayer";
 
 // Shared flag used by the landing page to detect direct navigation
 export const entered = { value: false };
@@ -14,12 +15,17 @@ export const Route = createFileRoute("/directory")({
   }),
 });
 
-// If a user hits /directory directly (no transition state), send them to the
-// landing page — the persistent iframe lives there and drives the whole flow.
 function Directory() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!entered.value) navigate({ to: "/", replace: true });
-  }, [navigate]);
-  return null;
+  entered.value = true;
+
+  return (
+    <main className="fixed inset-0 bg-black">
+      <iframe
+        src="/dpal/index.html"
+        title="DPAL Directory"
+        className="dir-reveal fixed inset-0 h-screen w-screen border-0 bg-black"
+      />
+      <AudioToggle />
+    </main>
+  );
 }
