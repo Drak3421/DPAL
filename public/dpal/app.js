@@ -592,26 +592,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setupCustomSites();
         checkForUpdates();
 
-        if (!localStorage.getItem('onboardingComplete')) {
-            const modal = document.getElementById('onboardingModal');
-            const content = document.getElementById('onboardingContent');
-            const btn = document.getElementById('startDpalBtn');
-            if (modal) {
-                modal.classList.remove('hidden');
-                // Trigger reflow
-                void modal.offsetWidth;
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                
-                btn.addEventListener('click', () => {
-                    modal.classList.add('opacity-0');
-                    content.classList.add('scale-95');
-                    localStorage.setItem('onboardingComplete', 'true');
-                    setTimeout(() => modal.classList.add('hidden'), 500);
-                });
-            }
-        }
-        
         parseHash(); // This will trigger renderChips and renderContent
     }
 
