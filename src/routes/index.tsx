@@ -33,7 +33,11 @@ function HomePage() {
   const [exiting, setExiting] = useState(false);
   const [showDirectory, setShowDirectory] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
+  const [speed, setSpeed] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const speedRef = useRef(1);
+  const triggeredRef = useRef(false);
 
   // Preload the directory iframe in the background as soon as landing mounts
   useEffect(() => {
@@ -56,6 +60,74 @@ function HomePage() {
     setTimeout(() => setShowDirectory(true), 450);
     setTimeout(() => navigate({ to: "/directory" }), 1400);
   };
+
+  // Scroll → speed up video. When speed passes threshold, enter the directory.
+  useEffect(() => {
+    const MAX_SPEED = 6;
+    const TRIGGER = 5.5;
+    const DECAY_PER_SEC = 0.6;
+
+    const bump = (deltaY: number) => {
+      if (triggeredRef.current) return;
+      const next = Math.min(MAX_SPEED, Math.max(1, speedRef.current + deltaY * 0.004));
+      speedRef.current = next;
+      setSpeed(next);
+      if (videoRef.current) videoRef.current.playbackRate = next;
+      if (next >= TRIGGER) {
+        triggeredRef.current = true;
+        handleEnter();
+      }
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (exiting) return;
+      e.preventDefault();
+      bump(e.deltaY);
+    };
+
+    let lastTouch = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      lastTouch = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (exiting) return;
+      const y = e.touches[0].clientY;
+      const dy = lastTouch - y;
+      lastTouch = y;
+      bump(dy * 2);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+
+    // Gentle decay so the effect eases back when the user stops scrolling.
+    let last = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const dt = (t - last) / 1000;
+      last = t;
+      if (!triggeredRef.current && speedRef.current > 1) {
+        const next = Math.max(1, speedRef.current - DECAY_PER_SEC * dt);
+        speedRef.current = next;
+        setSpeed(next);
+        if (videoRef.current) videoRef.current.playbackRate = next;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [exiting]);
+
+  const speedProgress = Math.min(1, (speed - 1) / (5.5 - 1));
+
+
 
   return (
     <main
