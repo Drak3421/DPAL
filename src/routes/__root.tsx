@@ -77,17 +77,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Aeon — Venture Past Our Sky" },
+      { title: "DPAL — Freedom lives in the archive" },
       {
         name: "description",
         content:
-          "Cinematic deep-space exploration. Pioneering vessels and breakthrough engineering that put the universe within reach.",
+          "A curated directory of tools, sites, and communities for streaming, downloading, reading, gaming, and reclaiming the media you love.",
       },
-      { property: "og:title", content: "Aeon — Venture Past Our Sky" },
+      { property: "og:title", content: "DPAL — Freedom lives in the archive" },
       {
         property: "og:description",
         content:
-          "Cinematic deep-space exploration. Pioneering vessels and breakthrough engineering that put the universe within reach.",
+          "A curated directory of tools, sites, and communities for streaming, downloading, reading, gaming, and reclaiming the media you love.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -99,7 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Barlow:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap",
       },
     ],
   }),
