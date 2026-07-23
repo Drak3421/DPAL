@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sectionHtml += `
         <div data-item="${encodeURIComponent(JSON.stringify(mainItem)).replace(/'/g, "%27")}" data-domain="${mainDomain}" data-screenshot="${mainScreenshot}" class="${chunk.length === 1 ? 'lg:col-span-12' : 'lg:col-span-6'} bg-surface-container-lowest dark:bg-background p-8 flex flex-col justify-between group hover:bg-surface-container-low dark:hover:bg-surface-container-low transition-all duration-300 ease-out active:scale-[0.98] tilt-card cursor-pointer min-h-[400px] relative overflow-hidden reveal" style="--stagger-idx: 0">
             <!-- Background Website Screenshot with Skeleton -->
-            <div class="absolute inset-0 opacity-20 group-hover:opacity-100 group-hover:scale-110 duration-700 ease-out pointer-events-none bg-cover bg-top lazy-image skeleton-bg" data-src="${mainScreenshot}"></div>
+            <div class="absolute inset-0 opacity-25 group-hover:opacity-100 group-hover:scale-110 duration-700 ease-out pointer-events-none bg-cover bg-top" style="background-image: url('${mainScreenshot}');"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
             
             <div class="relative z-10 flex justify-between items-start">
@@ -943,7 +943,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 sectionHtml += `
                 <div data-item="${encodeURIComponent(JSON.stringify(sideItem)).replace(/'/g, "%27")}" data-domain="${sideDomain}" data-screenshot="${sideScreenshot}" class="${itemClass} tilt-card" style="--stagger-idx: ${i}">
-                    <div class="absolute inset-0 opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out pointer-events-none bg-cover bg-top lazy-image skeleton-bg" data-src="${sideScreenshot}"></div>
+                    <div class="absolute inset-0 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out pointer-events-none bg-cover bg-top" style="background-image: url('${sideScreenshot}');"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none"></div>
 
                     <div class="relative z-10 flex justify-between items-start mb-8">
@@ -1786,3 +1786,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
+// --- Proactive Image Preloader ---
+function preloadCardImages(urls) {
+    if (!Array.isArray(urls)) return;
+    urls.forEach(url => {
+        if (!url) return;
+        const img = new Image();
+        img.src = url;
+    });
+}
