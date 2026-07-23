@@ -352,7 +352,7 @@
     <nav class="nav">
         <div class="nav-inner">
             <a href="./home.html" class="nav-logo">DPAL</a>
-            <a href="./index.html" class="nav-link">
+            <a href="./index.html#All" class="nav-link">
                 <span class="material-symbols-outlined" style="font-size:16px;">explore</span>
                 Open Directory
             </a>
@@ -368,7 +368,7 @@
             </div>
             <h1>The Ultimate Free<br/><span class="gradient-text">Resource Directory</span></h1>
             <p>DPAL is a curated, ad-free directory of high-performance tools, streaming sites, AI platforms, and developer resources. Browse by category below to get started.</p>
-            <a href="./index.html" style="text-decoration:none;">
+            <a href="./index.html#All" style="text-decoration:none;">
                 <div class="hero-search">
                     <div class="hero-search-left">
                         <span class="material-symbols-outlined">search</span>
@@ -664,6 +664,16 @@
             DPAL &mdash; The Ultimate Free Resource Directory &bull; No ads, no trackers, no BS.
         </div>
     </footer>
+
+    <!-- Search Shortcut -->
+    <script>
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                window.location.href = './index.html#All';
+            }
+        });
+    </script>
 
 </body>
 </html>
