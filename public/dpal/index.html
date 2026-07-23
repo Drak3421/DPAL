@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+    <!-- Redirect to landing page if no category hash is present -->
+    <script>
+        if (!window.location.hash || window.location.hash === '#' || window.location.hash === '#All') {
+            window.location.replace('./home.html');
+        }
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5V7LSM41MC"></script>
     <script>
@@ -312,9 +318,9 @@
             <div class="flex justify-between items-center h-16 px-margin max-w-[1400px] mx-auto">
                 <div class="flex items-center gap-3">
                     <button id="mobileMenuBtn" type="button" aria-label="Open navigation menu" class="md:hidden material-symbols-outlined text-muted-text hover:text-primary transition-colors cursor-pointer min-w-11 min-h-11 -ml-2 grid place-items-center" title="Menu">menu</button>
-                    <div class="font-display-xl-mobile text-headline-lg-mobile tracking-tighter text-primary">
+                    <a href="./home.html" class="font-display-xl-mobile text-headline-lg-mobile tracking-tighter text-primary no-underline hover:opacity-80 transition-opacity">
                         DPAL
-                    </div>
+                    </a>
                 </div>
                 
                 <div class="flex items-center gap-4 h-full">
