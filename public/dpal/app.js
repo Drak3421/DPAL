@@ -1,3 +1,8 @@
+// Hardware detection for low-end devices
+if ((navigator.deviceMemory && navigator.deviceMemory < 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)) {
+    document.documentElement.classList.add('low-end');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const contentContainer = document.getElementById('contentContainer');
     const searchInput = document.getElementById('searchInput');

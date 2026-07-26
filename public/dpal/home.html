@@ -11,6 +11,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Hardware detection for low-end devices -->
+    <script>
+        if ((navigator.deviceMemory && navigator.deviceMemory < 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)) {
+            document.documentElement.classList.add('low-end');
+        }
+    </script>
     
     <style>
         :root {
@@ -35,6 +43,34 @@
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+
+        }
+
+        /* Low-end Device Optimizations */
+        html.low-end *, html.low-end *::before, html.low-end *::after {
+            transition: none !important;
+            animation: none !important;
+        }
+        html.low-end .nav {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: #050505 !important;
+        }
+        html.low-end .search-bar {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: #111 !important;
+        }
+        html.low-end .hero-badge {
+            backdrop-filter: none !important;
+            background: rgba(255,255,255,0.08) !important;
+        }
+        html.low-end .bento-card::before {
+            display: none !important; /* disable hover glow */
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
         }
 
         /* Subtle Grid Background */
