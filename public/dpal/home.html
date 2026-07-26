@@ -245,7 +245,62 @@
             line-height: 1.6;
         }
 
-        /* Bento Grid */
+        /* Newly Added Section */
+        .newly-added-section {
+            margin-bottom: 80px;
+        }
+        .newly-added-header {
+            margin-bottom: 24px;
+        }
+        .newly-added-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .newly-added-header h2 .material-symbols-outlined {
+            color: #10b981; /* green */
+        }
+        .newly-added-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        .new-chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .new-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 8px 16px;
+            border-radius: 100px;
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .new-chip:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+        .new-chip span.count {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        /* Bento Grid Header */
         .bento-section {
             padding: 120px 0;
         }
@@ -427,6 +482,110 @@
                 <h3>Install as Native App</h3>
                 <p>Click "Install App" in the directory to run DPAL as a fast, offline-capable desktop or mobile application.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Newly Added Section -->
+    <section class="newly-added-section container">
+        <div class="newly-added-header">
+            <h2><span class="material-symbols-outlined">new_releases</span> Newly Added Resources</h2>
+            <p>Fresh links recently scraped and verified from across the web.</p>
+        </div>
+        <div class="new-chips-container" id="newly-added-container">
+            <!-- NEW_WEBSITES_START -->
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Movies / TV / Anime
+                <span class="count">933</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Music & Audio
+                <span class="count">807</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Books & Reading
+                <span class="count">816</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Gaming & Emulation
+                <span class="count">896</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Android & iOS
+                <span class="count">1086</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Developer Tools
+                <span class="count">894</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Torrenting
+                <span class="count">87</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Educational
+                <span class="count">1506</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Adblocking & Privacy
+                <span class="count">331</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Non-English
+                <span class="count">1428</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Miscellaneous
+                <span class="count">1467</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Artificial Intelligence
+                <span class="count">347</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in System Tools
+                <span class="count">343</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Internet Tools
+                <span class="count">724</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Social Media Tools
+                <span class="count">500</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Image Tools
+                <span class="count">685</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Video Tools
+                <span class="count">389</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in File Tools
+                <span class="count">345</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Text Tools
+                <span class="count">460</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Gaming Tools
+                <span class="count">890</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Linux / MacOS
+                <span class="count">684</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Downloading
+                <span class="count">126</span>
+            </a>
+            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                New in Storage
+                <span class="count">190</span>
+            </a>
+            <!-- NEW_WEBSITES_END -->
         </div>
     </section>
 

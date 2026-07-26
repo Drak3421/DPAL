@@ -63,7 +63,29 @@ try {
     if (catMap['Educational'] !== undefined) {
         homeHtml = homeHtml.replace(/(href="\.\/index\.html#Educational".*?<div class="topic-pill">)[\d,]+ topics(<\/div>)/s, `$1${catMap['Educational']} topics$2`);
     }
+
+    // Generate HTML for Newly Added chips
+    const newCat = data.find(c => c.name === "Newly Added Websites");
+    let chipsHtml = '';
+    if (newCat && newCat.subcategories) {
+        for (const sub of newCat.subcategories) {
+            const count = sub.items.length;
+            // encode the hash link properly, e.g. "Newly Added Websites" -> #Newly%20Added%20Websites
+            chipsHtml += `\n            <a href="./index.html#Newly%20Added%20Websites" class="new-chip">
+                ${sub.name}
+                <span class="count">${count}</span>
+            </a>`;
+        }
+    }
     
+    // Inject chips into home.html
+    const chipRegex = /<!-- NEW_WEBSITES_START -->.*?<!-- NEW_WEBSITES_END -->/s;
+    if (chipsHtml) {
+        homeHtml = homeHtml.replace(chipRegex, `<!-- NEW_WEBSITES_START -->${chipsHtml}\n            <!-- NEW_WEBSITES_END -->`);
+    } else {
+        homeHtml = homeHtml.replace(chipRegex, `<!-- NEW_WEBSITES_START -->\n            <p style="color: var(--text-muted); font-size: 0.9rem;">No new sites this week. Check back later!</p>\n            <!-- NEW_WEBSITES_END -->`);
+    }
+
     fs.writeFileSync(homePath, homeHtml, 'utf8');
     console.log("Successfully updated home.html stats with total:", formattedTotal);
 
