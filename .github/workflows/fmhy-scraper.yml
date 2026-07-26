@@ -1,0 +1,29 @@
+name: Automated FMHY Scraper
+
+on:
+  schedule:
+    # Runs at 00:00 every 10 days
+    - cron: '0 0 */10 * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Scraping Script
+        run: node update_directory.cjs
+
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Sync latest FMHY database & update Recently Added websites"
+          branch: main
+          file_pattern: "public/dpal/data.js"
