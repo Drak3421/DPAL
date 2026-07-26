@@ -18,12 +18,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run Scraping Script
-        run: node update_directory.cjs
+      - name: Run Scraping Script & Update Home Stats
+        run: |
+          node update_directory.cjs
+          node update_home_stats.cjs
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated: Sync latest FMHY database & update Recently Added websites"
           branch: main
-          file_pattern: "public/dpal/data.js"
+          file_pattern: "public/dpal/data.js public/dpal/home.html"
