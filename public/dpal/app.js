@@ -1797,24 +1797,3 @@ function preloadCardImages(urls) {
     });
 }
 
-// --- Music Player Logic ---
-const musicBtn = document.getElementById('musicToggleBtn');
-const bgMusic = document.getElementById('bgMusic');
-let isMusicPlaying = false;
-
-if (musicBtn && bgMusic) {
-    musicBtn.addEventListener('click', () => {
-        if (isMusicPlaying) {
-            bgMusic.pause();
-            musicBtn.textContent = 'music_off';
-            musicBtn.classList.remove('text-primary');
-            musicBtn.classList.add('text-muted-text');
-        } else {
-            bgMusic.play().catch(e => console.log('Audio play failed:', e));
-            musicBtn.textContent = 'music_note';
-            musicBtn.classList.add('text-primary');
-            musicBtn.classList.remove('text-muted-text');
-        }
-        isMusicPlaying = !isMusicPlaying;
-    });
-}
