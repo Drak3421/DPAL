@@ -397,6 +397,12 @@
                 </div>
 
                 <h3 class="font-label-sm text-label-sm text-muted-text uppercase tracking-widest mb-6 pl-2">Categories</h3>
+                
+                <button id="changePrefBtn" class="flex items-center gap-3 bg-surface border border-grid-line text-on-surface font-label-sm px-4 py-3 rounded-xl hover:bg-surface-container-low transition-colors w-full text-left mb-6 cursor-pointer" style="display: none;">
+                    <span class="material-symbols-outlined text-lg text-primary">manage_search</span>
+                    Change Default Category
+                </button>
+
                 <!-- Category Chips Container (Populated by JS) -->
                 <div id="navChips" class="flex flex-col gap-2">
                     <!-- Chips inserted here -->
@@ -599,6 +605,24 @@
                     b.textContent = isDark ? 'light_mode' : 'dark_mode';
                 });
             });
+        });
+    </script>
+    
+
+    <!-- Change Preference Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pref = localStorage.getItem('dpal-preferred-category');
+            if (pref && pref !== 'skip') {
+                const btn = document.getElementById('changePrefBtn');
+                if (btn) {
+                    btn.style.display = 'flex';
+                    btn.addEventListener('click', () => {
+                        localStorage.removeItem('dpal-preferred-category');
+                        window.location.href = './home.html';
+                    });
+                }
+            }
         });
     </script>
     
