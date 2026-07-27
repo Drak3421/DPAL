@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sentinel = document.createElement('div');
     sentinel.id = 'scrollSentinel';
     sentinel.className = 'w-full h-20';
-    contentContainer.parentNode.insertBefore(sentinel, contentContainer.nextSibling);
+    if (contentContainer && contentContainer.parentNode) { contentContainer.parentNode.insertBefore(sentinel, contentContainer.nextSibling); }
 
     let currentCategory = 'My Favorites';
     let currentSort = 'featured';
@@ -987,6 +987,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CHUNKS_PER_PAGE = 4; // Render 20 items per batch to fill screen
 
     function renderNextBatch() {
+        if (!contentContainer) return;
         if (taskIndex >= renderTasks.length) return;
         
         let htmlBatch = '';
