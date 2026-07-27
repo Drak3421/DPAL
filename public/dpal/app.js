@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sentinel = document.createElement('div');
     sentinel.id = 'scrollSentinel';
     sentinel.className = 'w-full h-20';
-    if (contentContainer && contentContainer.parentNode) { contentContainer.parentNode.insertBefore(sentinel, contentContainer.nextSibling); }
+    contentContainer.parentNode.insertBefore(sentinel, contentContainer.nextSibling);
 
     let currentCategory = 'My Favorites';
     let currentSort = 'featured';
@@ -987,7 +987,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const CHUNKS_PER_PAGE = 4; // Render 20 items per batch to fill screen
 
     function renderNextBatch() {
-        if (!contentContainer) return;
         if (taskIndex >= renderTasks.length) return;
         
         let htmlBatch = '';
@@ -1238,7 +1237,8 @@ document.addEventListener('DOMContentLoaded', () => {
             contentContainer.innerHTML = `<div class="font-body-lg text-muted-text text-center py-20">No results found.</div>`;
             return;
         }
-renderNextBatch(); // Initial load
+
+        renderNextBatch(); // Initial load
             }, 0);
         });
     }
@@ -1246,10 +1246,8 @@ renderNextBatch(); // Initial load
 
     function setupSearchAndSort() {
         const openCmd = (e) => {
-            if (e) {
-                e.preventDefault();
-                if (e.target && e.target.blur) e.target.blur(); // Prevent mobile keyboard from opening
-            }
+            e.preventDefault();
+            e.target.blur(); // Prevent mobile keyboard from opening
             const cmdOverlay = document.getElementById('commandPaletteOverlay');
             const cmdPalette = document.getElementById('commandPalette');
             const cmdInput = document.getElementById('commandInput');
@@ -1268,22 +1266,6 @@ renderNextBatch(); // Initial load
         if (mobileSearchInput) {
             mobileSearchInput.addEventListener('click', openCmd);
             mobileSearchInput.addEventListener('focus', openCmd);
-        }
-        
-        // Handle redirect from home.html search bar
-        const urlParams = new URLSearchParams(window.location.search);
-        const queryParam = urlParams.get('q');
-        if (queryParam) {
-            setTimeout(() => {
-                openCmd();
-                const cmdInput = document.getElementById('commandInput');
-                if (cmdInput) {
-                    cmdInput.value = queryParam;
-                    cmdInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-                // Clean URL so refresh doesn't pop it up again
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }, 300);
         }
         
         if (sortSelect) {
