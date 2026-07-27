@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('dpal-theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                // Default to dark
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    
     <!-- Redirect to landing page if no category hash is present -->
     <script>
         if (!window.location.hash || window.location.hash === '#') {
@@ -570,5 +584,23 @@
             });
         }
     </script>
+
+    <!-- Theme Toggle Logic -->
+    <script>
+        document.querySelectorAll('.themeToggleBtn').forEach(btn => {
+            // Set initial icon
+            btn.textContent = document.documentElement.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+            
+            btn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('dpal-theme', isDark ? 'dark' : 'light');
+                
+                document.querySelectorAll('.themeToggleBtn').forEach(b => {
+                    b.textContent = isDark ? 'light_mode' : 'dark_mode';
+                });
+            });
+        });
+    </script>
+    
 </body>
 </html>
