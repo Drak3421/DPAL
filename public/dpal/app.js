@@ -1237,8 +1237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contentContainer.innerHTML = `<div class="font-body-lg text-muted-text text-center py-20">No results found.</div>`;
             return;
         }
-
-        renderNextBatch(); // Initial load
+renderNextBatch(); // Initial load
             }, 0);
         });
     }
@@ -1246,8 +1245,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupSearchAndSort() {
         const openCmd = (e) => {
-            e.preventDefault();
-            e.target.blur(); // Prevent mobile keyboard from opening
+            if (e) {
+                e.preventDefault();
+                if (e.target && e.target.blur) e.target.blur(); // Prevent mobile keyboard from opening
+            }
             const cmdOverlay = document.getElementById('commandPaletteOverlay');
             const cmdPalette = document.getElementById('commandPalette');
             const cmdInput = document.getElementById('commandInput');
@@ -1266,6 +1267,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mobileSearchInput) {
             mobileSearchInput.addEventListener('click', openCmd);
             mobileSearchInput.addEventListener('focus', openCmd);
+        }
+        
+        // Handle redirect from home.html search bar
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('q');
+        if (queryParam) {
+            setTimeout(() => {
+                openCmd();
+                const cmdInput = document.getElementById('commandInput');
+                if (cmdInput) {
+                    cmdInput.value = queryParam;
+                    cmdInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                // Clean URL so refresh doesn't pop it up again
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }, 300);
         }
         
         if (sortSelect) {

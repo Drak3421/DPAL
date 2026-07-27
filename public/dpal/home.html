@@ -195,6 +195,7 @@
             max-width: 640px;
             position: relative;
             text-decoration: none;
+            display: block; /* Ensure form takes full width */
         }
         .search-bar {
             width: 100%;
@@ -207,20 +208,30 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            cursor: text;
         }
-        .search-bar:hover {
-            border-color: rgba(255,255,255,0.15);
-            background: rgba(30, 30, 34, 0.7);
-            transform: translateY(-2px);
+        .search-bar:focus-within {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
         }
         .search-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+            color: var(--text-muted);
+            width: 100%;
+        }
+        .search-left input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 100%;
+            font-size: 1.1rem;
+            font-family: var(--font-sans);
+        }
+        .search-left input::placeholder {
             color: var(--text-muted);
         }
         .search-left .material-symbols-outlined { color: #fff; font-size: 24px; }
@@ -489,15 +500,15 @@
         <h1>Discover the Web's<br/>Hidden Gems.</h1>
         <p>A beautifully curated, zero-ad directory for streaming, artificial intelligence, tools, and developer resources. Everything you need, one command away.</p>
         
-        <a href="./index.html#All" class="search-container">
-            <div class="search-bar">
-                <div class="search-left">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>Search anything...</span>
+        <form action="./index.html" method="GET" class="search-container">
+            <div class="search-bar focus-within:border-emerald-500 focus-within:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-300">
+                <div class="search-left w-full flex items-center gap-3">
+                    <span class="material-symbols-outlined text-muted-text">search</span>
+                    <input type="text" name="q" placeholder="Search anything..." class="bg-transparent border-none outline-none text-white w-full font-sans text-[1rem]" autocomplete="off" autofocus />
                 </div>
-                <span class="search-kbd">Ctrl K</span>
+                <span class="search-kbd shrink-0">Enter</span>
             </div>
-        </a>
+        </form>
     </section>
 
     <!-- Flow -->
