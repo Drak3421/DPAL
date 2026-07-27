@@ -86,6 +86,12 @@ try {
         homeHtml = homeHtml.replace(chipRegex, `<!-- NEW_WEBSITES_START -->\n            <p style="color: var(--text-muted); font-size: 0.9rem;">No new sites this week. Check back later!</p>\n            <!-- NEW_WEBSITES_END -->`);
     }
 
+    
+    // Update scraper timestamp for the countdown timer
+    const timeRegex = /<!-- SCRAPER_TIME_START -->.*?<!-- SCRAPER_TIME_END -->/s;
+    const nowMs = Date.now();
+    homeHtml = homeHtml.replace(timeRegex, `<!-- SCRAPER_TIME_START -->\n        window.LAST_SCRAPE_TIME = ${nowMs};\n        // <!-- SCRAPER_TIME_END -->`);
+
     fs.writeFileSync(homePath, homeHtml, 'utf8');
     console.log("Successfully updated home.html stats with total:", formattedTotal);
 

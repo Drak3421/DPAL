@@ -473,6 +473,13 @@
     <nav class="nav">
         <div class="nav-inner">
             <a href="./home.html" class="nav-logo">DPAL.</a>
+            <div style="flex: 1;"></div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 16px;">
+                <span style="font-size: 10px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">Next Database Sync</span>
+                <div id="updateTimer" style="font-size: 12px; font-family: monospace; font-weight: 500; color: #10b981; background: rgba(16,185,129,0.1); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.2);">
+                    Calculating...
+                </div>
+            </div>
             <a href="./index.html#All" class="nav-btn">
                 Open Directory
                 <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
@@ -733,5 +740,40 @@
             }
         });
     </script>
+
+    <!-- Timer Logic -->
+    <script>
+        // <!-- SCRAPER_TIME_START -->
+        window.LAST_SCRAPE_TIME = 1785166796232;
+        // <!-- SCRAPER_TIME_END -->
+
+        function updateTimer() {
+            const el = document.getElementById('updateTimer');
+            if (!el || !window.LAST_SCRAPE_TIME) return;
+
+            // Next update is 10 days after LAST_SCRAPE_TIME
+            const targetDate = window.LAST_SCRAPE_TIME + (10 * 24 * 60 * 60 * 1000);
+            const now = Date.now();
+            let diff = targetDate - now;
+
+            if (diff <= 0) {
+                el.textContent = "Updating now...";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff -= days * (1000 * 60 * 60 * 24);
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            diff -= hours * (1000 * 60 * 60);
+            const mins = Math.floor(diff / (1000 * 60));
+            diff -= mins * (1000 * 60);
+            const secs = Math.floor(diff / 1000);
+
+            el.textContent = `${days}d ${hours.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+
 </body>
 </html>
