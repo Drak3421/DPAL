@@ -18,6 +18,9 @@
         if ((navigator.deviceMemory && navigator.deviceMemory < 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)) {
             document.documentElement.classList.add('low-end');
         }
+        // <!-- SCRAPER_TIME_START -->
+        window.LAST_SCRAPE_TIME = 1785165373452;
+        // <!-- SCRAPER_TIME_END -->
     </script>
     
     <style>
@@ -299,6 +302,22 @@
         .newly-added-header {
             margin-bottom: 24px;
         }
+        .scraper-timer {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+        .scraper-timer .timer-text {
+            color: #fff;
+            font-weight: 700;
+        }
         .newly-added-header h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -534,9 +553,15 @@
 
     <!-- Newly Added Section -->
     <section class="newly-added-section container">
-        <div class="newly-added-header">
-            <h2><span class="material-symbols-outlined">new_releases</span> Newly Added Resources</h2>
-            <p>Fresh links recently scraped and verified from across the web.</p>
+        <div class="newly-added-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h2><span class="material-symbols-outlined">new_releases</span> Newly Added Resources</h2>
+                <p>Fresh links recently scraped and verified from across the web.</p>
+            </div>
+            <div class="scraper-timer">
+                <span class="material-symbols-outlined" style="font-size:16px;">update</span>
+                Next auto-update in: <span id="countdownTimer" class="timer-text font-mono">--:--:--</span>
+            </div>
         </div>
         <div class="new-chips-container" id="newly-added-container">
             <!-- NEW_WEBSITES_START -->
@@ -753,6 +778,35 @@
                 window.location.href = './index.html#All';
             }
         });
+    </script>
+    <script>
+        // Start countdown timer
+        function updateTimer() {
+            const el = document.getElementById('countdownTimer');
+            if (!el || !window.LAST_SCRAPE_TIME) return;
+
+            // Target date is exactly 10 days after the last scrape
+            const targetDate = window.LAST_SCRAPE_TIME + (10 * 24 * 60 * 60 * 1000);
+            const now = Date.now();
+            let diff = targetDate - now;
+
+            if (diff <= 0) {
+                el.textContent = "Updating now...";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff -= days * (1000 * 60 * 60 * 24);
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            diff -= hours * (1000 * 60 * 60);
+            const mins = Math.floor(diff / (1000 * 60));
+            diff -= mins * (1000 * 60);
+            const secs = Math.floor(diff / 1000);
+
+            el.textContent = `${days}d ${hours.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
     </script>
 </body>
 </html>
