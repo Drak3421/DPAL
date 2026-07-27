@@ -2,26 +2,7 @@
 <html lang="en" class="dark">
 <head>
 
-    <!-- Onboarding Auto-Redirect -->
-    <script>
-        (function() {
-            try {
-                const pref = localStorage.getItem('dpal-preferred-category');
-                const skipTime = localStorage.getItem('dpal-preferred-skip');
-                
-                if (pref && pref !== 'skip') {
-                    // Instant redirect before page renders
-                    window.location.replace('./index.html#' + encodeURIComponent(pref));
-                } else if (skipTime) {
-                    const now = Date.now();
-                    // 7 days = 7 * 24 * 60 * 60 * 1000 = 604800000 ms
-                    if (now - parseInt(skipTime) > 604800000) {
-                        localStorage.removeItem('dpal-preferred-skip');
-                    }
-                }
-            } catch(e) {}
-        })();
-    </script>
+
 
     <script>
         (function() {
