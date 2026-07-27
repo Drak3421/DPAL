@@ -827,14 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildTags(item, subcategoryName) {
-        const tags = [];
-        if (subcategoryName) tags.push(subcategoryName.split(' ')[0].replace(/[^a-zA-Z0-9]/g, ''));
-        if (item.links && item.links.length > 0) {
-            const domain = getDomain(item.links[0].url);
-            const domainParts = domain.split('.');
-            if (domainParts.length >= 2) tags.push(domainParts[domainParts.length-2]);
-        }
-        return [...new Set(tags)].filter(t => t.length > 2).slice(0, 2);
+        return []; // Disabled at user request
     }
 
     function generateChunkHtml(chunk) {
