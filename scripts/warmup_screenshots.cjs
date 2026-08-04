@@ -7,17 +7,14 @@ const cacheFilePath = path.join(__dirname, '../.screenshot_cache.json');
 
 // Read data.js and extract fmhyData
 let dataContent = fs.readFileSync(dataFilePath, 'utf8');
-// Strip the "const fmhyData = " prefix and any trailing semicolons to parse it as JSON
 let jsonStr = dataContent.replace(/^window\.fmhyData\s*=\s*/, '').trim();
-if (jsonStr.endsWith(';')) {
-    jsonStr = jsonStr.slice(0, -1);
-}
+if (jsonStr.endsWith(';')) jsonStr = jsonStr.slice(0, -1);
 
 let fmhyData = [];
 try {
     fmhyData = JSON.parse(jsonStr);
 } catch(e) {
-    console.error("Failed to parse data.js. Ensure it is valid JSON assigned to fmhyData.", e.message);
+    console.error("Failed to parse data.js.", e.message);
     process.exit(1);
 }
 
@@ -54,19 +51,18 @@ if (newUrls.length === 0) {
     process.exit(0);
 }
 
-console.log(`Found ${newUrls.length} new URLs. Warming up screenshots...`);
+console.log(`Found ${newUrls.length} missing URLs. Warming up screenshots...`);
 
-// Process in batches with a delay
 let currentIndex = 0;
+let saveCounter = 0;
 
 function pingNext() {
     if (currentIndex >= newUrls.length) {
-        // Save cache
         fs.writeFileSync(cacheFilePath, JSON.stringify(cache, null, 2));
-        console.log("Finished warming up screenshots and saved cache!");
-        
-        // Add cache file to git staging if we're in a git hook
-        require('child_process').execSync('git add .screenshot_cache.json');
+        console.log("\nFinished warming up screenshots and saved cache!");
+        try {
+            require('child_process').execSync('git add .screenshot_cache.json');
+        } catch (e) {}
         process.exit(0);
     }
 
@@ -74,20 +70,27 @@ function pingNext() {
     const encodedUrl = encodeURIComponent(url);
     const mshotsUrl = `https://s0.wp.com/mshots/v1/${encodedUrl}?w=600`;
     
-    process.stdout.write(`[${currentIndex + 1}/${newUrls.length}] Pinging ${url}... `);
+    // Use stdout.write to keep it on one line if possible, or just log occasionally
+    if (currentIndex % 50 === 0) {
+        console.log(`[${currentIndex + 1}/${newUrls.length}] Pinging batch starting with ${url}...`);
+    }
     
     https.get(mshotsUrl, (res) => {
-        if (res.statusCode === 200 || res.statusCode === 301 || res.statusCode === 302) {
-            console.log("OK");
+        if (res.statusCode === 200 || res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 307) {
             cache[url] = true;
-        } else {
-            console.log(`Failed (${res.statusCode})`);
         }
         
         currentIndex++;
-        setTimeout(pingNext, 200); // 200ms delay to avoid aggressive rate limiting
+        saveCounter++;
+        
+        // Save cache every 100 requests to preserve progress
+        if (saveCounter >= 100) {
+            fs.writeFileSync(cacheFilePath, JSON.stringify(cache, null, 2));
+            saveCounter = 0;
+        }
+        
+        setTimeout(pingNext, 200); // 200ms delay (5 req/sec)
     }).on('error', (e) => {
-        console.log(`Error (${e.message})`);
         currentIndex++;
         setTimeout(pingNext, 200);
     });
