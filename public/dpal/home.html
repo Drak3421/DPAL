@@ -476,25 +476,6 @@
             .bento-wide .icon-wrap { margin-bottom: 16px; margin-right: 0; }
             .bento-card { min-height: 200px; }
         }
-    
-        /* High Contrast Enhancements for Bright Video */
-        .hero h1, .hero p, .flow-step h3, .flow-step p, .newly-added-header h2, .newly-added-header p, .nav-logo {
-            text-shadow: 0 4px 32px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.9);
-        }
-        
-        .search-bar, .new-chip, .bento-card, .cat-generic, .hero-badge, .nav-btn, .onboarding-content {
-            backdrop-filter: blur(16px) !important;
-            -webkit-backdrop-filter: blur(16px) !important;
-            background: rgba(10, 10, 12, 0.75) !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
-            border: 1px solid rgba(255,255,255,0.15) !important;
-        }
-        
-        .new-chip:hover, .bento-card:hover, .search-bar:hover, .cat-generic:hover {
-            background: rgba(20, 20, 24, 0.85) !important;
-            border-color: rgba(255,255,255,0.3) !important;
-        }
-
     </style>
 </head>
 <body>
@@ -504,12 +485,12 @@
         style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; pointer-events: none; opacity: 0; transition: opacity 900ms ease;">
         <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_055001_8e16d972-3b2b-441c-86ad-2901a54682f9.mp4" type="video/mp4">
     </video>
-    <div id="bg-gradient-overlay" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; pointer-events: none; background:linear-gradient(to bottom, rgba(10,10,12,0.2), rgba(10,10,12,0.35)); transition: opacity 300ms ease;"></div>
+    <div id="bg-gradient-overlay" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; pointer-events: none; background:linear-gradient(to bottom, rgba(10,10,12,0.7), rgba(10,10,12,0.9)); transition: opacity 300ms ease;"></div>
     <script>
     (function(){
       const v = document.getElementById('bg-video');
       if (!v) return;
-      const BASE_OPACITY = 0.85;
+      const BASE_OPACITY = 0.45;
       const FADE_WINDOW = 0.8;
       let lastTime = 0;
       v.playbackRate = 1;
