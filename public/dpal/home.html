@@ -4,19 +4,7 @@
 
 
 
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('dpal-theme');
-            if (savedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-            } else if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                // Default to dark
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
+    
     
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -39,43 +27,6 @@
     
     <style>
 
-        /* Light Mode Overrides */
-        html:not(.dark) {
-            --bg: #ffffff;
-            --text: #111111;
-            --text-muted: #666666;
-            --surface: #f9f9f9;
-            --surface-hover: #f1f1f1;
-            --border: rgba(0,0,0,0.1);
-        }
-        html:not(.dark) body { background-color: var(--bg); color: var(--text); }
-        html:not(.dark) body::before {
-            background-image: linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
-        }
-        html:not(.dark) .nav { background: rgba(255, 255, 255, 0.8); border-bottom: 1px solid var(--border); }
-        html:not(.dark) .nav-logo { color: #111; }
-        html:not(.dark) .nav-btn { background: #111; color: #fff; }
-        html:not(.dark) .hero h1 { background: linear-gradient(180deg, #111 0%, #555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        html:not(.dark) .hero p { color: var(--text-muted); }
-        html:not(.dark) .hero-badge { background: rgba(0,0,0,0.05); }
-        html:not(.dark) .hero-badge span:last-child { color: #333; }
-        html:not(.dark) .search-bar { background: #fff; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        html:not(.dark) .search-bar:hover { background: #fafafa; border-color: rgba(0,0,0,0.2); }
-        html:not(.dark) .search-left .material-symbols-outlined { color: #111; }
-        html:not(.dark) .search-left input { color: #111; }
-        html:not(.dark) .search-kbd { background: #f0f0f0; color: #111; border: 1px solid #ddd; }
-        html:not(.dark) .bento-card { background: #fff; border: 1px solid var(--border); }
-        html:not(.dark) .bento-card:hover { border-color: rgba(0,0,0,0.2); background: #fafafa; }
-        html:not(.dark) .bento-card h3 { color: #111; }
-        html:not(.dark) .bento-card p { color: var(--text-muted); }
-        html:not(.dark) .topic-pill { background: rgba(0,0,0,0.05); color: #333; }
-        html:not(.dark) .new-chip { background: #fff; border: 1px solid var(--border); color: #111; }
-        html:not(.dark) .new-chip:hover { border-color: #10b981; background: rgba(16,185,129,0.05); }
-        html:not(.dark) .new-chip .count { background: rgba(0,0,0,0.05); color: #333; }
-        html:not(.dark) .flow-icon { color: #111; }
-        html:not(.dark) .flow-step h3 { color: #111; }
-        html:not(.dark) .newly-added-header h2 { color: #111; }
-        html:not(.dark) .newly-added-header p { color: var(--text-muted); }
         html:not(.dark) .cat-generic .icon-wrap { background: rgba(0,0,0,0.05); color: #111; }
 
 
@@ -599,10 +550,7 @@
         <div class="nav-inner">
             <a href="./home.html" class="nav-logo">DPAL.</a>
             <div style="flex: 1;"></div>
-            <button class="themeToggleBtn material-symbols-outlined hover:bg-surface-container transition-colors duration-200" 
-                    style="margin-right: 16px; background: transparent; border: 1px solid var(--outline); color: var(--on-bg); cursor: pointer; border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; font-size: 20px;">
-                light_mode
-            </button>
+            
             <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 16px;">
                 <span style="font-size: 10px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">Next Database Sync</span>
                 <div id="updateTimer" style="font-size: 12px; font-family: monospace; font-weight: 500; color: #10b981; background: rgba(16,185,129,0.1); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.2);">
@@ -905,22 +853,7 @@
     </script>
 
 
-    <!-- Theme Toggle Logic -->
-    <script>
-        document.querySelectorAll('.themeToggleBtn').forEach(btn => {
-            // Set initial icon
-            btn.textContent = document.documentElement.classList.contains('dark') ? 'light_mode' : 'dark_mode';
-            
-            btn.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('dpal-theme', isDark ? 'dark' : 'light');
-                
-                document.querySelectorAll('.themeToggleBtn').forEach(b => {
-                    b.textContent = isDark ? 'light_mode' : 'dark_mode';
-                });
-            });
-        });
-    </script>
+    
     
 
     <!-- Onboarding Modal -->
