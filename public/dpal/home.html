@@ -485,12 +485,12 @@
         style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; pointer-events: none; opacity: 0; transition: opacity 900ms ease;">
         <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_055001_8e16d972-3b2b-441c-86ad-2901a54682f9.mp4" type="video/mp4">
     </video>
-    <div id="bg-gradient-overlay" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; pointer-events: none; background:linear-gradient(to bottom, rgba(10,10,12,0.7), rgba(10,10,12,0.9)); transition: opacity 300ms ease;"></div>
+    <div id="bg-gradient-overlay" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; pointer-events: none; background:linear-gradient(to bottom, rgba(10,10,12,0.2), rgba(10,10,12,0.35)); transition: opacity 300ms ease;"></div>
     <script>
     (function(){
       const v = document.getElementById('bg-video');
       if (!v) return;
-      const BASE_OPACITY = 0.45;
+      const BASE_OPACITY = 0.85;
       const FADE_WINDOW = 0.8;
       let lastTime = 0;
       v.playbackRate = 1;
@@ -886,6 +886,15 @@
         .onboarding-grid::-webkit-scrollbar { width: 6px; }
         .onboarding-grid::-webkit-scrollbar-track { background: transparent; }
         .onboarding-grid::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.2); border-radius: 10px; }
+        
+        /* Contrast shadows for bright video */
+        .hero h1, .hero p, .flow-step h3, .flow-step p, .newly-added-header h2, .newly-added-header p, .nav-logo {
+            text-shadow: 0 4px 24px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.5);
+        }
+        .search-bar, .new-chip, .bento-card, .cat-generic, .hero-badge, .nav-btn, .onboarding-content {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.4) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+        }
     </style>
     <div id="onboardingModal" style="display: none; opacity: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); transition: opacity 0.3s ease;">
         <div class="onboarding-content" style="background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 40px; max-width: 900px; width: 90%; max-height: 90vh; box-shadow: 0 24px 64px rgba(0,0,0,0.4); text-align: center; position: relative; display: flex; flex-direction: column;">
